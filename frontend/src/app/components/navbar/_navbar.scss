@@ -1,0 +1,108 @@
+.navbar.home-page-nav{
+    @include border-radius(0);
+    @include fillContainer;
+    @include transition(all 0.25s ease-out);
+    padding: 0.5rem;
+    margin: 0;
+    color: $white;
+    border: none;
+    z-index:10;
+    background-color: $green;
+}
+
+.companyTitle{
+    font-size: 1.5rem;
+    font-family: 'Ubuntu', serif;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    padding-right: 2rem;
+    margin-left: 0.5rem;
+    margin-right: 0.6rem;
+}
+.companyTitle,
+.companyTitle:link,
+.companyTitle:visited,
+.companyTitle:hover,
+.companyTitle:active {
+    color: $white;
+    text-decoration: none;
+}
+.nav-btn.home-page-nav{
+    @include center;
+    @include border-radius(0.5rem);
+    @include remove-btn-default;
+    position: relative;
+    color: $white;
+    padding: 0.5rem;
+    text-align: center;
+    font-size: 1rem;
+    font-family: 'Ubuntu', serif;
+    font-weight: 500;
+}
+
+.nav-btn.home-page-nav{
+    &:hover,
+    &:active{
+        @include hover-color;
+    }
+}
+
+.nav-btn.home-page-nav>p{
+    @include no-space;
+    position: relative;
+}
+
+.nav-btn.home-page-nav{
+    &:focus p::after,
+    &:active p::after{
+        position: absolute;
+        content: "";
+        width: calc(100% - 2px);
+        left: 1px;
+        bottom: -1.5px;
+        height: 2px;
+    }
+}
+
+
+#nav-toggler.home-page-nav{
+    @include center;
+    height: 2.5rem;
+    width: 2.5rem;
+    background-color: $background;
+}
+.nav-toggler-hide{
+    display: none;
+}
+#nav-toggler.home-page-nav, #search-btn{
+    @include no-space;
+}
+
+#nav-icon.home-page-nav{
+    @include center;
+    @include fillContainer;
+    @include transition(all 0.3s ease-out);
+    color: $white;
+}
+
+#nav-icon:hover{
+    @include hover-color;
+    @include border-radius(2px);
+}
+
+#nav-icon.home-page-nav.fa-arrow-down{
+    @include transition(all ease 0.2s);
+    transform: rotate(180deg);
+}
+
+#nav-icon.home-page-nav.fa-bars{
+    @include transition(all ease 0.2s);
+    transform: rotate(180deg);
+    font-size: 28px;
+}
+
+/* this is to control the drop animation of navbar */
+.home-page-nav.collapsing{
+    @include transition(height 0.15s ease-out !important);
+
+}

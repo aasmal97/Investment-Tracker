@@ -1,0 +1,9 @@
+@import "./scss_abstracts/variables";
+@import "../src/app/components/loadingIcon/loadingIcon";
+@import "../src/app/components/settings/settings";
+@import "../src/app/components/navbar/navbar";
+
+@import "./scss_abstracts/breakPoints";
+body, html{
+    @include no-space;
+}

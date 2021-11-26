@@ -1,0 +1,24 @@
+
+#copyright{
+    @include no-space;
+    color: white;
+}
+#footer{
+    padding-top: 3rem;
+    padding-bottom: 2.5rem;
+    background-color: rgb(107, 97, 144);
+}
+.foot-link{
+    color: $main-font-color;
+    text-align: center;
+    width: 60%;
+}
+
+.foot-link:hover{
+    @include hover-color;
+    @include border-radius(5px);
+}
+
+#footer div div>h5{
+    color: white
+}

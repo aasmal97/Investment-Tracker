@@ -1,5 +1,6 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
+main.css
+main.css.map
 # dependencies
 /node_modules
 /.pnp

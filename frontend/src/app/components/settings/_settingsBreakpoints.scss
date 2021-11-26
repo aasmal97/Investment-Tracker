@@ -1,0 +1,18 @@
+@mixin settings-lg {
+    .setting-current-form-container{
+        padding: 4rem;
+        padding-bottom: 2rem;
+    }
+}
+@mixin settings-md {
+    .setting-current-form-container{
+        padding: 3rem;
+        padding-bottom: 1.5rem;
+    }
+}
+@mixin settings-sm {
+    .setting-current-form-container{
+        padding: 1rem;
+        padding-bottom: 0.5rem;
+    }
+}

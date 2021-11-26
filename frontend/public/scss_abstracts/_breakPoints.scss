@@ -1,0 +1,19 @@
+//responsive stylesheets as mixins
+@import "../../src/app/components/settings/settingsBreakpoints";
+//@import "../../src/app/components/footer/footerBreakPoints";
+
+@media (min-width: 992px) {
+    @include settings-lg;
+}
+
+@media (max-width: 992px){
+    @include settings-md;
+}
+
+@media(max-width: 768px){
+    
+}
+
+@media (max-width: 575px) { 
+    @include settings-sm;
+}

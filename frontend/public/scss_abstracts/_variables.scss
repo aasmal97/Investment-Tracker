@@ -1,0 +1,100 @@
+$main-font: 'Poppins', sans-serif;
+
+$main-color: rgba(107, 97, 144, 0.8);
+
+
+$main-font-color: black; 
+$secondary-font-color: white; 
+$label-font-color: black;
+
+$main-font-size: 14px;
+
+$bg-color: rgb(9, 3, 34);
+$light-bg-color: white;
+
+
+$lightest-gray: #f3f3f3;
+$lighter-gray: #f0f0f0;
+$light-gray: rgb(201, 201, 201);
+
+$dark-gray:rgb(63, 70, 82);
+$darkest-gray: rgb(39, 44, 51);
+
+$background: rgba(0,0,0,0.26);
+$black: black;
+$white: white;
+$light-blue: #dbedfd;
+$dark-blue: rgba(8, 40, 109, 1); 
+$purple: rgba(58,19,208,1);
+$green: #6bc76b;
+$dark-green: #5aaa5a;
+@mixin remove-btn-default {
+    background: none;
+    border: none;
+}
+@mixin anchor-top-left {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+@mixin box-shadow($x){
+    -webkit-box-shadow: $x;
+    -moz-box-shadow: $x;
+    -ms-box-shadow: $x;
+    box-shadow: $x;
+};
+
+@mixin border-radius($x){
+    -webkit-border-radius: $x;
+    -moz-border-radius: $x;
+    -ms-border-radius: $x;
+    border-radius: $x;
+};
+
+@mixin position-transition{
+    position: absolute;
+    z-index: 3;
+    transition: all 0.3s;
+}
+
+@mixin hidden{
+    display: none;
+    visibility: hidden;
+    position: absolute;
+}
+
+@mixin center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin fillContainer{
+    height: 100%;
+    width: 100%;
+}
+
+@mixin fullViewport{
+    width: 100vw;
+    height: 100vh;
+}
+
+@mixin hover-color{
+    background: $background;
+    color:  $white;
+}
+
+@mixin no-space {
+    margin: 0;
+    padding: 0;
+}
+
+@mixin transition ($str...) {
+    -webkit-transition: $str;
+    -ms-transition: $str;
+    -o-transition: $str;
+    -moz-transition: $str; 
+    transition: $str;
+}
