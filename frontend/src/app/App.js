@@ -24,20 +24,16 @@ function App() {
             <Routes>
                 <Route
                   exact path="/signup"
-                  element={
-                    <NavWrapper>
-                      <SignUp/>
-                    </NavWrapper>
-                  }
+                  element={currentUser ?<Navigate to="/dashboard"/> :<NavWrapper><SignUp/></NavWrapper>}
                 /> 
                 <Route
                   exact path="/login"
-                  element={
-                    <NavWrapper>
-                      <Login/>
-                    </NavWrapper>
-                  }
+                  element={currentUser ? <Navigate to="/dashboard"/> :<NavWrapper><Login/></NavWrapper>}
                 /> 
+                <Route
+                  exact path="/dashboard"
+                  element={currentUser ? <NavWrapper><Dashboard/></NavWrapper> : <Navigate to="/login"/>}
+                />
                 <Route
                   exact path="/resetPassword"
                   element={
@@ -47,17 +43,8 @@ function App() {
                   }
                 /> 
                 <Route
-                  exact path="/dashboard"
-                  element={currentUser ? <NavWrapper><Dashboard/></NavWrapper> : <Navigate to="/login"/>}
-                />
-        
-                <Route
                   exact path="/settings"
-                  element={
-                    <NavWrapper>
-                      <Settings/>
-                    </NavWrapper>
-                  }
+                  element={currentUser ? <NavWrapper><Settings/></NavWrapper>: <Navigate to="/login"/>}
                 />    
             </Routes>
         </Suspense> 
