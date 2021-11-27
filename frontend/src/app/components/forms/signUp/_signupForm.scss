@@ -1,0 +1,19 @@
+.sign-up-form-container{
+    margin-top: 3.5rem;
+    min-height: calc(100vh - 3.5rem);
+    height: 100%;
+}
+.sign-up-form{
+    max-width: 30rem;
+    min-width: 300px;
+    width: 75%;
+    height: 100%;
+    background-color: $dark-gray;
+    @include border-radius(0.5rem);
+    color: $white;
+    padding: 1rem;
+    margin: 0 1rem;
+}
+.sign-up-error{
+    text-align: center;
+}

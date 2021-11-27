@@ -1,4 +1,4 @@
-const NavItem = ({sidebar=false, url=false, handleSideBar=false, btn=false, textContent, styles=false, hidden="false"}) =>{  
+const NavItem = ({sidebar=false, url=false, onClick, btn=false, textContent, styles=false, hidden="false"}) =>{  
     return (
         <>
             {sidebar ? 
@@ -12,24 +12,37 @@ const NavItem = ({sidebar=false, url=false, handleSideBar=false, btn=false, text
                         href={url}
                         aria-hidden = {hidden}
                         tabIndex={`${hidden ? "-1":"0"}`}
+                        onClick = {onClick}
                     >
                             <span>{textContent}</span>
                     </a>
-                    :
+                :
                     <button
                         className={styles ? styles : ""}
                         aria-label={textContent}
                         aria-hidden = {hidden}
                         tabIndex={`${hidden ? "-1":"0"}`}
+                        onClick = {onClick}
                     >
                         <span>{textContent}</span>
                     </button>
-                :
-                <button 
-                    className="nav-btn home-page-nav mx-1" 
+            : !btn ? 
+                <a 
+                    className={`nav-anchor-link home-page-nav mx-1 ${styles ? styles : ""}`} 
                     aria-label={textContent}
                     aria-hidden = {hidden}
                     tabIndex={`${hidden ? "-1":"0"}`}
+                    onClick = {onClick}
+                >
+                    <span>{textContent}</span>
+                </a>
+
+                :<button 
+                    className={`nav-btn home-page-nav mx-1 ${styles ? styles : ""}`} 
+                    aria-label={textContent}
+                    aria-hidden = {hidden}
+                    tabIndex={`${hidden ? "-1":"0"}`}
+                    onClick = {onClick}
                 >
                         <span>{textContent}</span>
                 </button>

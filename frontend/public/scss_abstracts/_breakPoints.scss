@@ -1,13 +1,19 @@
 //responsive stylesheets as mixins
+@import "../../src/app/components/navbar/navbarBreakpoints";
 @import "../../src/app/components/settings/settingsBreakpoints";
+@import "../../src/app/components/forms/formsBreakpoints";
 //@import "../../src/app/components/footer/footerBreakPoints";
 
 @media (min-width: 992px) {
+    @include navbar-lg;
     @include settings-lg;
+    @include form-lg;
 }
 
 @media (max-width: 992px){
+    @include navbar-md;
     @include settings-md;
+    @include form-md;
 }
 
 @media(max-width: 768px){
@@ -15,5 +21,7 @@
 }
 
 @media (max-width: 575px) { 
+    @include navbar-sm;
     @include settings-sm;
+    @include form-sm;
 }

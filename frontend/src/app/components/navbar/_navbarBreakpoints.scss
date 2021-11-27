@@ -1,0 +1,10 @@
+@mixin navbar-lg {
+    
+} 
+@mixin navbar-md{
+    .navbar-authenticate-btn{
+        margin-bottom: 1rem;
+    }
+}
+@mixin navbar-sm {
+}

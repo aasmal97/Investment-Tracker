@@ -1,0 +1,18 @@
+@mixin form-lg {
+    .sign-up-form, .log-in-form{
+        padding: 4rem;
+        padding-bottom: 3rem;
+    }
+}
+@mixin form-md {
+    .sign-up-form, .log-in-form{
+        padding: 3rem;
+        padding-bottom: 2rem;
+    }
+}
+@mixin form-sm {
+    .sign-up-form, .log-in-form{
+        padding: 1rem;
+        padding-bottom: 1.5rem;
+    }
+}
