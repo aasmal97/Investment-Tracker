@@ -7,14 +7,13 @@ import axios from 'axios';
 const AuthContext = React.createContext()
 const auth = getAuth(app)
 const backendAPI = process.env.REACT_APP_BACKEND_API
-console.log(backendAPI)
 export function AuthProvider({children}) {
     //hold info on current user
     const [currentUser, setCurrentUser] = useState()
     const [loading, setLoading] = useState(true)
-    function signup (email, password, firstName, lastName){
-        createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) =>{
+    async function signup (email, password, firstName, lastName){
+        return createUserWithEmailAndPassword(auth, email, password)
+        .then(async(userCredential) =>{
             const user = userCredential.user
             const userData = {
                 uid: user.uid,
@@ -25,21 +24,14 @@ export function AuthProvider({children}) {
                 email: user.email
             }
             axios.post(backendAPI+"/user", userData)
-            .then((res) => {
-                return res
-            })
-            .catch((error) =>{
-                const errorCode = error.code;
-                const errorMessage = error.message
-                return errorCode + " " + errorMessage
-            })
+            .then((res) => res.data).catch(error => error)
         })
         .catch((error) =>{
             const errorCode = error.code;
-            const errorMessage = error.message
-            return errorCode + " " + errorMessage
+            return errorCode
         })
     }
+
     function login(email, password) {
         return signInWithEmailAndPassword(auth, email, password)
     } 

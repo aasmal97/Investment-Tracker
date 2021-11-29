@@ -12,7 +12,8 @@ router.route("/").post(async function (req, res, next) {
         lastName : req.body.lastName,
         verifiedEmail: req.body.emailVerified,
         connected_banks: [],
-        tracked_investments: []
+        tracked_investments: [],
+        contact_settings: []
     }
     const newUser = new User(newUserProps)
     await newUser.save()

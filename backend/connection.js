@@ -3,9 +3,23 @@ const express = require("express");
 const app = express();
 const cors = require('cors')
 const userRoutes = require("./routes/user/user");
+const admin = require('firebase-admin');
+//const serviceAccount = require("path/to/serviceAccountKey.json");
 
 //local variables
 require("dotenv").config({ path: "./config.env" });
+//initialize firebase auth
+const googleCred = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS)
+
+const firebaseApp = global.firebaseApp ?? admin.initializeApp({
+    credential: admin.credential.cert({
+        ...googleCred,
+        private_key: googleCred.private_key?.replace(/\\n/g, '\n')
+    })
+});
+//store as a global variable so we can reuse it
+global.firebaseApp = firebaseApp
+
 //support cross orgin scripting
 const corsOptions = {
     origin: process.env.FRONTEND_DOMAIN_ORIGIN,

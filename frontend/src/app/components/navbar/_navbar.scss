@@ -131,3 +131,12 @@
         color: $dark-gray;
     }
 }
+.sign-up-form-submitted{
+    top:0;
+    left: 0;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.712);
+    z-index: 4;
+    height: calc(max(100vh, 100%));
+    width: calc(max(100vw, 100%));
+}

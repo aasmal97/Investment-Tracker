@@ -11,8 +11,8 @@
     @include fillContainer;
     .loading-icon{
         @include border-radius(50%);
-        border: 0.4rem rgba(99, 99, 99, 0.185) solid;
-        border-top-color: $main-color;
+        border: 0.3rem rgba(99, 99, 99, 0.185) solid;
+        border-top-color: $green;
         width: 1.5rem;
         height: 1.5rem;
         animation: animate-loading-icon 0.85s linear infinite;
@@ -21,8 +21,8 @@
 .loading-icon-container.fill-viewport{
     height: 100vh;
     .loading-icon{
-        width: 2rem;
-        height: 2rem;
+        width: 2.2rem;
+        height: 2.2rem;
     }
 }
 
