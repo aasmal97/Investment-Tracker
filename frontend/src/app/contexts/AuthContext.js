@@ -2,15 +2,43 @@ import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail} from 'firebase/auth'
 import app from "../../firebase"
+import axios from 'axios';
+
 const AuthContext = React.createContext()
 const auth = getAuth(app)
-
+const backendAPI = process.env.REACT_APP_BACKEND_API
+console.log(backendAPI)
 export function AuthProvider({children}) {
     //hold info on current user
     const [currentUser, setCurrentUser] = useState()
     const [loading, setLoading] = useState(true)
-    function signup (email, password){
-        return createUserWithEmailAndPassword(auth, email, password)
+    function signup (email, password, firstName, lastName){
+        createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) =>{
+            const user = userCredential.user
+            const userData = {
+                uid: user.uid,
+                firstName: firstName,
+                lastName: lastName,
+                metadata: user.metadata,
+                emailVerified: user.emailVerified,
+                email: user.email
+            }
+            axios.post(backendAPI+"/user", userData)
+            .then((res) => {
+                return res
+            })
+            .catch((error) =>{
+                const errorCode = error.code;
+                const errorMessage = error.message
+                return errorCode + " " + errorMessage
+            })
+        })
+        .catch((error) =>{
+            const errorCode = error.code;
+            const errorMessage = error.message
+            return errorCode + " " + errorMessage
+        })
     }
     function login(email, password) {
         return signInWithEmailAndPassword(auth, email, password)
