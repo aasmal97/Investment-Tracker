@@ -8,6 +8,9 @@
     border: none;
     z-index:10;
     background-color: $green;
+    a{
+        text-decoration: none;
+    }
 }
 
 .companyTitle{

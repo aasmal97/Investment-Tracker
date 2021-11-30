@@ -3,6 +3,7 @@ import NavItem from '../navItems/NavItems';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 export default function Navbar(props) {
@@ -10,6 +11,7 @@ export default function Navbar(props) {
     const [togglerDisabled, setTogglerDisabled] = useState(false);
     const {currentUser, logout} = useAuth()
     const [error, setError] = useState("")
+
     const navigate = useNavigate()
 
     // Every time "disabled" changes, runs this callback.
@@ -38,7 +40,8 @@ export default function Navbar(props) {
         <div className="navbar-expand-lg fixed-top">
                 <nav 
                     id="navbar" 
-                    className={`navbar home-page-nav navbar-expand-lg`}>
+                    className={`navbar home-page-nav navbar-expand-lg`}
+                >
                     <a href="/" className="companyTitle">FinTrack</a>
                     <div className={`nav-toggler-${props.windowWidth ? "hide": "show"}`}>
                         <NavToggler 
@@ -46,20 +49,39 @@ export default function Navbar(props) {
                             togglerDisabled = {togglerDisabled}
                             btnToggled = {toggled}
                         />
-                    </div>    
-                    
-                    
+                    </div>
                     <div id="navbarSupportedContent" className={`collapse navbar-collapse home-page-nav`}>
                         <div className= {`d-flex ${props.windowWidth ? "navbar-nav w-100 justify-content-end me-3" : "justify-content-center"}`}>
                             <div className={`${props.windowWidth ? "d-flex justify-content-end" : "d-flex flex-column w-50"} ${toggled && !props.windowWidth ? "mb-2":""}`}>
-                                <NavItem 
-                                    styles ={"navbar-anchor-link"}
-                                    textContent={"About"} 
-                                />
-                                <NavItem 
-                                    styles ={"navbar-anchor-link"}
-                                    textContent={"Help"} 
-                                />
+                                {currentUser && 
+                                    //render dashboard and settings options in navbar
+                                    <>
+                                    <Link to="/dashboard">
+                                        <NavItem 
+                                            styles ={"navbar-anchor-link"}
+                                            textContent={"Dashboard"} 
+                                        />
+                                    </Link>
+                                    <Link to="/settings">
+                                        <NavItem 
+                                            styles ={"navbar-anchor-link"}
+                                            textContent={"Settings"} 
+                                        />
+                                    </Link>
+                                    </>
+                                }
+                                <Link to="/about">
+                                    <NavItem 
+                                        styles ={"navbar-anchor-link"}
+                                        textContent={"About"} 
+                                    />
+                                </Link>
+                                <Link to="/Help">
+                                    <NavItem 
+                                        styles ={"navbar-anchor-link"}
+                                        textContent={"Help"} 
+                                    />
+                                </Link>
                                 <NavItem 
                                     btn = {true}
                                     styles ={"navbar-authenticate-btn"}

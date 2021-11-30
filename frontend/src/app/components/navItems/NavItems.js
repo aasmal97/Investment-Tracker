@@ -1,3 +1,4 @@
+
 const NavItem = ({sidebar=false, url=false, onClick, btn=false, textContent, styles=false, hidden="false"}) =>{  
     return (
         <>
@@ -6,16 +7,15 @@ const NavItem = ({sidebar=false, url=false, onClick, btn=false, textContent, sty
                 //if not we provide a button 
                 //both accept custom classes
                 !btn ? 
-                    <a
+                    <div
                         className={`${sidebar === "primary" ? "primary":"secondary"}-sidebar-link ${styles? styles:""}`} 
                         aria-label={textContent}
-                        href={url}
                         aria-hidden = {hidden}
                         tabIndex={`${hidden ? "-1":"0"}`}
                         onClick = {onClick}
                     >
                             <span>{textContent}</span>
-                    </a>
+                    </div>
                 :
                     <button
                         className={styles ? styles : ""}
@@ -27,7 +27,7 @@ const NavItem = ({sidebar=false, url=false, onClick, btn=false, textContent, sty
                         <span>{textContent}</span>
                     </button>
             : !btn ? 
-                <a 
+                <div 
                     className={`nav-anchor-link home-page-nav mx-1 ${styles ? styles : ""}`} 
                     aria-label={textContent}
                     aria-hidden = {hidden}
@@ -35,7 +35,7 @@ const NavItem = ({sidebar=false, url=false, onClick, btn=false, textContent, sty
                     onClick = {onClick}
                 >
                     <span>{textContent}</span>
-                </a>
+                </div>
 
                 :<button 
                     className={`nav-btn home-page-nav mx-1 ${styles ? styles : ""}`} 

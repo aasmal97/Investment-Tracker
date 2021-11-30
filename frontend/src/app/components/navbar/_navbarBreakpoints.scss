@@ -1,10 +1,23 @@
 @mixin navbar-lg {
-    
+    .navbar.home-page-nav{
+        a{
+            margin-right: 0.5rem;
+        }
+    }
 } 
 @mixin navbar-md{
     .navbar-authenticate-btn{
         margin-bottom: 1rem;
     }
+    .navbar.home-page-nav{
+        a{
+            margin-bottom: 0.5rem;
+        }
+        .companyTitle{
+            margin-bottom: 0 !important;
+        }
+    }
+    
 }
 @mixin navbar-sm {
 }

@@ -32,8 +32,12 @@ export function AuthProvider({children}) {
         })
     }
 
-    function login(email, password) {
+    async function login(email, password) {
         return signInWithEmailAndPassword(auth, email, password)
+        .catch((error) =>{
+            const errorCode = error.code;
+            return errorCode
+        })
     } 
     function logout(){
         return signOut(auth)

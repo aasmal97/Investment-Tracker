@@ -4,7 +4,7 @@ const users = new mongoose.Schema({
     email: String,
     firstName: String,
     lastName: String,
-    tracked_investments: [{name: String, last_tracked_date: Date, abbreviation: String, invested_amount:Number}],
+    tracked_investments: [{name: String, last_viewed: Date, abbreviation: String, invested_amount:Number}],
     connected_banks: [String],
     contact_settings: [String],
     metadata: {

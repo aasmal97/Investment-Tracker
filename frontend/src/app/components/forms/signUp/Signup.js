@@ -17,7 +17,6 @@ const Signup = () => {
         e.preventDefault()
         //password dont match
         if(password !== passwordConfirm) return setError("Passwords do not match")
-        
         //signup
         setError("")
         setLoading(true)
@@ -31,11 +30,11 @@ const Signup = () => {
                 break;
             case "auth/invalid-email":
                 setError("This is an invalid email account")  
+                break;
             default:
                 setError("An error has occured")
                 break;
         }
-       
         //restore btn and function since await was already called once
         //this is to prevent multiple account creations
         setLoading(false)
