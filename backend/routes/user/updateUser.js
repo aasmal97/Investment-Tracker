@@ -1,6 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const User = require("../../models/User");
+const asyncWrapper = require("../../asyncWrapper")
 // Grab user data after verifiying user login
 router.route("/:token").put(async function (req, res, next) {
     global.firebaseApp.auth().verifyIdToken(req.params.token)
@@ -12,11 +13,9 @@ router.route("/:token").put(async function (req, res, next) {
             userData[key] = req.body[key]
             return
         })
-        await userData.save()
-        return res.send(userData)
+        [updateSuccess, error] = asyncWrapper(userData.save())
+        return updateSuccess ? res.send(userData) : res.send(error)
     })
-    .catch((error) => {
-        return res.send(error)
-    });
+    .catch((error) => res.send(error));
 });
 module.exports = router

@@ -45,19 +45,16 @@ const Settings = () =>{
         else newState["bottom"] = "setting-"+currentOptions[bottom_btn_index].content.toLowerCase()
         setSettingSelected(newState)  
     }
-    console.log(userInfo, settingSelected)
+
     return(
         <div className={`overall-settings-container d-flex align-items-stretch ${!mobileWindowWidth? "flex-column justify-content-center":""}`}>
-            
             <SettingsSidebar
                 currentOptions = {currentOptions}
                 onSettingClick = {onSettingClick}
                 settingSelected = {settingSelected}
                 mobileWindowWidth = {mobileWindowWidth}
-            />
-            
+            />  
             <div className="settings-current-option-content align-self-center d-flex justify-content-center">
-                
                 <div className="setting-current-form-container w-100">
                     <div className="d-flex flex-column align-items-center w-100">
                         {userInfo.verifiedEmail ?
@@ -85,7 +82,6 @@ const Settings = () =>{
                             Save Changes
                         </button>
                     </div>
-                
                 </div>
             </div>    
         </div>

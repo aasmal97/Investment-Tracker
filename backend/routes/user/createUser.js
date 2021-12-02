@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const User = require("../../models/User")
-
+const asyncWrapper = require("../../asyncWrapper")
 // This section will help you create a new record.
 router.route("/").post(async function (req, res, next) {
     const newUserProps = {
@@ -16,9 +16,15 @@ router.route("/").post(async function (req, res, next) {
         contact_settings: []
     }
     const newUser = new User(newUserProps)
-    await newUser.save()
-    const welcomeMessage = `Welcome ${req.body.firstName}, to your investment tracking journey! Congrats on taking the first step to financial independence!`;
-    return res.send(welcomeMessage)
+    const saveUser = () =>{
+        newUser.save()
+        const welcomeMessage = `Welcome ${req.body.firstName}, to your investment tracking journey! Congrats on taking the first step to financial independence!`;
+        return welcomeMessage
+    }
+
+    const [welcomeMessage, error] = await asyncWrapper(saveUser())
+    
+    return welcomeMessage ? res.send(welcomeMessage) : res.send(error)
 });
 
 module.exports = router

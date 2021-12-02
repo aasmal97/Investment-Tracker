@@ -1,7 +1,8 @@
 const GeneralSettings = (props) =>{
     return(
         <>
-        <div className="w-100">
+        <div className="setting-general-container w-100">
+            <h1>General</h1>
             <div className="mb-3 d-flex justify-content-between">
                 <div className="me-1 setting-current-input-container w-100">
                     <label htmlFor="first-name" className="form-label">First Name</label>
