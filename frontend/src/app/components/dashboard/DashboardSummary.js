@@ -1,17 +1,22 @@
 import SearchBar from "../searchBar/SearchBar";
 
 const DashboardSummary = (props) =>{
+    
     return (
-    <div className="dashboard-summary-data w-100"> 
-        <div><p>Current Investment Total:</p></div>
-        <div><p>Top Performing Stock:</p><p>(In Portfolio)</p></div>
-        <div><p>Lifetime Cash Invested: </p></div>
-        <div><p>Lifetime Growth: </p></div>
-        <div><p>Yearly Change: </p><p>{}</p></div>
-        
-        <div></div>
-        <div className="d-flex w-100">
-            <p>Add New Investment</p>
+    <div className="dashboard-summary-data"> 
+        <h2 id="dashboard-summary-title" className="w-100">Overview</h2>
+        {/*generate summary items*/
+        props.summaryLabels.map((data) => {
+            return(
+                <div className="summary-row d-flex align-items-center justify-content-between">
+                    <p className="row-label">{data.label}</p>
+                    <div className="flex-grow-1">
+                        
+                    </div>
+                </div>
+            )
+        })}
+        <div className="summary-row">  
             <SearchBar 
                 placeholder = {props.searchPlaceholder}
                 onClick = {props.onClick}
@@ -20,9 +25,10 @@ const DashboardSummary = (props) =>{
                 searchType = {props.searchType}
                 id = {props.searchInputId}
                 searchResults = {props.searchResults}
+                label = {"New " + props.searchType[0].toUpperCase()+props.searchType.substring(1) }
+                className = {"d-flex align-items-center summary-search justify-content-between"}
             />
         </div>
-        <div><p>Delete Investment</p></div>
         
     </div>
     )

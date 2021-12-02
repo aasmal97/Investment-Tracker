@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const SearchBar = (props) =>{
     return (
-        <div className={`${props.className? props.className+" ":""}mb-4`}>
+        <div className={`${props.className? props.className+" ":""}`}>
             <label 
                 htmlFor={props.id} 
                 className="form-label">

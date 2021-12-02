@@ -10,14 +10,16 @@ const DashboardGraph = (props) =>{
     
     return (
         <>
-        <div className={props.className}>
-
-        </div>
-        {props.graphKey && 
-            <div className={props.className+"-key"}>
-
+        <div className={`d-flex ${props.className}`}>
+            <div className={props.className+"-data"}>
             </div>
-        }
+            {props.graphKey && 
+                <div className={props.className+"-key"}>
+
+                </div>
+            }
+        </div>
+        
         </>
     )
 }

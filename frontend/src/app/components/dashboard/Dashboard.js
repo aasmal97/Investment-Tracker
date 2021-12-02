@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useState } from "react"
+import {useRef, useEffect, useState } from "react"
 import {useDispatch, useSelector } from "react-redux";
 import { getUserData } from "../../../redux/features/userInfo/userInfoSlice";
 import { getInvestData } from "../../../redux/features/investData/investDataSlice";
@@ -32,28 +32,28 @@ const Dashboard = (props) =>{
         setSearchType(selectedSearchType)
         dispatch(resetSearch())
     }
-    const onSearchQuery = (e) =>{
+    
+    const onSearchQuery = (keywords) =>{
         //if only white space, do not perform a search query
-        const checkString = e.target.value
+        const checkString = keywords.keywords
         if(!checkString.trim()) return dispatch(resetSearch())
-        let keywords = {
+        dispatch(getSearchData(keywords))
+    }
+
+    const debouncedSearchQuery = useRef(debounce((keywords) => onSearchQuery(keywords), 1000)).current;
+    
+    const onSearchChange = (e) =>{
+        const keywords = {
             type : searchType,
             token: currentUser.accessToken,
             keywords: e.target.value
         }
-        dispatch(getSearchData(keywords))
-    }
-    const debouncedSearchQuery = useMemo(
-        () => debounce(onSearchQuery, 1000)
-    , [searchType, currentUser.accessToken]);
-   
-    const onSearchChange = (e) =>{
         setSearchInput(e.target.value)
-        debouncedSearchQuery(e)
+        debouncedSearchQuery(keywords)
     }
     return(
         <div className="dashboard-container">
-            <div className = {`d-flex w-100 ${!windowWidth && "flex-column"}`}>
+            <div className = {`d-flex w-100 ${!windowWidth && "flex-column align-items-center"}`}>
                 <DashboardSummary
                     searchInputId = {"search-input-id"}
                     searchInput = {searchInput} 
@@ -66,19 +66,27 @@ const Dashboard = (props) =>{
                         : searchType==="stock" ? "Apple, AAPL, tesla, etc"
                         : null
                     }
+                    summaryLabels = {
+                        [
+                            {label: "Top Performing Investment"},
+                            {label: "Investment Total"},
+                            {label: "Lifetime Cash Invested"},
+                            {label: "Yearly Change"}
+                        ]
+                    }
                 />
-                <div className="d-flex w-100 dashboard-all-investments-graph">
-                    <DashboardGraph 
-                        className = "dashboard-all-investments-graph-data"
-                        graphKey = {true}
-                        investments = {userInfo.tracked_investments}
-                    />
-                </div>
+                
+                <DashboardGraph 
+                    className = "dashboard-all-investments-graph"
+                    graphKey = {true}
+                    investments = {userInfo.tracked_investments}
+                />
+
             </div>
             <div className = "d-flex flex-wrap justify-content-center w-100">
                 {userInfo.tracked_investments.length === 0 ?
                     <>
-                        <p>You are not tracking any investments. Add one to get started</p>
+                        <div><p>You are not tracking any investments. Add one to get started</p></div>
                     </>
                 : userInfo.tracked_investments.map((investment) => {
                     return (

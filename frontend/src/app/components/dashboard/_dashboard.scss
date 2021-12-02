@@ -3,7 +3,48 @@
     background-color: $dark-gray;
     min-width: 100vw;
     min-height: calc(100vh - 3.5rem);
+    padding: 0 2rem;
 }
 .dashboard-summary-data, .dashboard-all-investments-graph{
     min-width: 310px;
+    background-color: white;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    @include border-radius(0.5rem);
+}
+.dashboard-summary-data{
+    .summary-row{
+        padding: 0.3rem 0;
+        border-bottom: 1px solid $light-gray;
+        min-height: 2.7rem;   
+    }
+    .summary-row:last-child{
+        border-bottom: 0;
+    }
+    p{
+        margin: 0;
+    }
+    .row-label{
+        width: 6rem;
+        text-align: center;
+    }
+    .summary-search{
+        label{
+            width: 6rem !important;
+            margin: 0;
+            text-align: center;
+        }
+        .search-bar{
+            width: auto;
+        }
+    }
+}
+.dashboard-all-investments-graph-data, .dashboard-all-investments-graph-key{
+    background-color: white;
+}
+#dashboard-summary-title{
+    text-align: center;
+    color: $dark-green;
+    font-weight: 600;
+    font-family: 'Ubuntu', sans-serif;
 }

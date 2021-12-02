@@ -1,6 +1,7 @@
 @mixin dashboard-lg {
     .dashboard-summary-data{
-        width: 40%;
+        width: 45%;
+        margin-right: 2rem;
     }
     .dashboard-all-investments-graph{
         width: 55%;
@@ -8,12 +9,22 @@
 }
 @mixin dashboard-md {
     .dashboard-summary-data{
-        width: 70%;
+        width: 80%;
+        font-size: 0.9rem;
     }
     .dashboard-all-investments-graph{
-        width: 70%;
+        width: 80%;
     }
 }
 @mixin dashboard-sm {
-    
+    .dashboard-summary-data{
+        // p{
+        //     font-size: 0.8rem;
+        // }
+        font-size: 0.8rem;
+        width: 90%;
+    }
+    .dashboard-all-investments-graph{
+        width: 90%;
+    }
 }
