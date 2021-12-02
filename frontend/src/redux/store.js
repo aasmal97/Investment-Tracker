@@ -6,7 +6,7 @@ export default configureStore({
     reducer: {
         userInfo: userInfoReducer,
         investmentData: investDataReducer,
-        searchInvestmets: searchInvestReducer
+        searchInvestments: searchInvestReducer
     },
 })
 

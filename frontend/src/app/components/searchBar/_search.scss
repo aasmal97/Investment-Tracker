@@ -1,0 +1,47 @@
+.search-bar{
+    position: relative;
+
+}
+#search-input-id{
+    z-index: 3
+}
+.search-investments-dropdown{
+    position: absolute;
+    top: 2.27rem;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    height: min-content;
+    padding: 1rem;
+    z-index: 1;
+    @include box-shadow(0 0 3px rgb(250, 250, 250));
+    @include border-radius(0rem 0rem 0.5rem 0.5rem !important);
+    p{
+        margin: 0;
+    }
+    button{
+        @include remove-btn-default;
+        margin-bottom: 0.5rem;
+        font-size: 0.85rem;
+        min-height: 2.27rem;
+        @include border-radius(0.3rem)
+    }
+    button:hover{
+        background-color: $dark-gray;
+        color:$white;
+        
+    }
+}
+.search-dropdown-titles{
+    text-align: center;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    min-height: 2.27rem;
+    padding: 0.3rem 6px;
+    background-color: $green;
+    @include border-radius(0.3rem);
+    @include box-shadow(0 0 2px rgba(0, 0, 0, 0.253));
+    color: white;
+    font-weight: 500;
+
+}

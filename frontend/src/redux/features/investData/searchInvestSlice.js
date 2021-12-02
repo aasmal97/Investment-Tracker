@@ -17,7 +17,7 @@ export const searchInvestSlice = createSlice({
             state.status = "loading"
         },
         [getSearchData.fulfilled]: (state, action) =>{
-            state = action.payload
+            state["results"] = action.payload
             state["status"] = "success";
             return state
         },
@@ -26,7 +26,11 @@ export const searchInvestSlice = createSlice({
         }
     },
     reducers: {
-        resetSearch: () => {}
+        resetSearch: (state) => {
+            state = {}
+            state["status"] = null
+            return state
+        }
     },
 })
 export const { resetSearch } = searchInvestSlice.actions

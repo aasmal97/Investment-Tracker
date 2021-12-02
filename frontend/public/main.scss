@@ -4,6 +4,7 @@
 @import "../src/app/components/navbar/navbar";
 @import "../src/app/components/dashboard/dashboard";
 @import "../src/app/components/forms/forms";
+@import "../src/app/components/searchBar/search";
 @import "./scss_abstracts/breakPoints";
 body, html{
     @include no-space;

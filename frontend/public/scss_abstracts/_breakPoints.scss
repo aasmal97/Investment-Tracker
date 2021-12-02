@@ -2,18 +2,21 @@
 @import "../../src/app/components/navbar/navbarBreakpoints";
 @import "../../src/app/components/settings/settingsBreakpoints";
 @import "../../src/app/components/forms/formsBreakpoints";
+@import "../../src/app/components/dashboard/dashboardBreakpoints";
 //@import "../../src/app/components/footer/footerBreakPoints";
 
 @media (min-width: 992px) {
     @include navbar-lg;
     @include settings-lg;
     @include form-lg;
+    @include dashboard-lg;
 }
 
 @media (max-width: 992px){
     @include navbar-md;
     @include settings-md;
     @include form-md;
+    @include dashboard-md;
 }
 
 @media(max-width: 768px){
@@ -24,4 +27,5 @@
     @include navbar-sm;
     @include settings-sm;
     @include form-sm;
+    @include dashboard-sm
 }

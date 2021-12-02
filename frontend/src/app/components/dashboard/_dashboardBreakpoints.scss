@@ -1,0 +1,19 @@
+@mixin dashboard-lg {
+    .dashboard-summary-data{
+        width: 40%;
+    }
+    .dashboard-all-investments-graph{
+        width: 55%;
+    }
+}
+@mixin dashboard-md {
+    .dashboard-summary-data{
+        width: 70%;
+    }
+    .dashboard-all-investments-graph{
+        width: 70%;
+    }
+}
+@mixin dashboard-sm {
+    
+}

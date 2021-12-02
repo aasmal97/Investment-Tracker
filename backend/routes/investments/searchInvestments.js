@@ -8,7 +8,7 @@ router.route("/:token/:type/:keywords").get(async function (req, res, next) {
         case "stock":
             global.finnhubClient.symbolSearch(req.params.keywords, (error, data, response) => {
                  if (error) console.error(error)
-                 return res.send(data ? data: error.status)
+                 return res.send(data ? data.result.splice(0,10) : error.status)
              })
             break;
         case "crypto":
@@ -23,7 +23,6 @@ router.route("/:token/:type/:keywords").get(async function (req, res, next) {
                         }
                     }).limit(10)
                 )
-
             return searchResults ? res.send(searchResults) : res.send(error)
         default:
             return res.send({status:"Invalid Request"})
