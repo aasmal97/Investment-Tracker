@@ -25,9 +25,9 @@ export const getInvestData = createAsyncThunk("user/getInvestData", async(invest
                 })
                 //delete unneeded keys
                 delete trackedInvestments[trackedInvestments.length-1].investedAmount
-                delete trackedInvestments[trackedInvestments.length-1].currBalance
+                delete trackedInvestments[trackedInvestments.length-1].prevBalance
                 //update cashTransactions data
-                newData.cashTransactions.push({changeBy: key.investedAmount, currBalance: key.currBalance})
+                newData.cashTransactions.push({changeBy: key.investedAmount, prevBalance: key.prevBalance})
             }
             //update userInfo state
             investData.updateUserData(newData)

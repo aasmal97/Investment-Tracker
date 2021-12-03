@@ -6,6 +6,9 @@
     .dashboard-all-investments-graph{
         width: 55%;
     }
+    #selected-invest-form-save-btn{
+        width: 10rem;
+    }
 }
 @mixin dashboard-md {
     .dashboard-summary-data{
@@ -14,6 +17,9 @@
     }
     .dashboard-all-investments-graph{
         width: 80%;
+    }
+    #selected-invest-form-save-btn{
+        width: 10rem;
     }
 }
 @mixin dashboard-sm {
@@ -26,5 +32,8 @@
     }
     .dashboard-all-investments-graph{
         width: 90%;
+    }
+    #selected-invest-form-save-btn{
+        width: 100%;
     }
 }

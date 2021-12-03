@@ -8,7 +8,7 @@ const users = new mongoose.Schema({
     contactSettings: {type: Map, of:Boolean},
     cashTransactions: [{
         changeBy: String, 
-        currBalance: String}],
+        prevBalance: String}],
     metadata: {
         type: Map,
         of: String

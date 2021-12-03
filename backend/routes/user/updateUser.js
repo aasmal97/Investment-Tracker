@@ -8,7 +8,7 @@ router.route("/:token").put(async function (req, res, next) {
     .then(async(decodedToken) =>{
         const uid = decodedToken.uid;
         const userData = await User.findById(uid).exec()
-        //update all new keys in userData
+        //delete token field. The request has been authenticated
         delete req.body.token 
         //update fields
         userData = {...userData, ...req.body}

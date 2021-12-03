@@ -1,5 +1,5 @@
 import SearchBar from "../searchBar/SearchBar";
-
+import SelectInvestmentsForm from "./DashboardSummarySelectForm"
 const DashboardSummary = (props) =>{
     return (
     <div className="dashboard-summary-data"> 
@@ -23,25 +23,11 @@ const DashboardSummary = (props) =>{
                 {...props}
             />
             
-            {//generate from of selected investments
+            {//generate form of selected investments
             props.selectedInvestments.length !== 0 ? 
-                <form onSubmit = {props.onSaveInvestSubmit}>
-                    {props.selectedInvestments.map((investment) =>{
-                        return (
-                            <div 
-                                key={investment.symbol}
-                            >
-                                <h3>{investment.name}</h3>
-                            </div>
-                        )
-                    })}
-                    <button>
-
-                    </button>
-                </form>
+                <SelectInvestmentsForm {...props}/>
             :null}
         </div>
-        
     </div>
     )
 }

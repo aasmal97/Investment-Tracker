@@ -18,9 +18,9 @@ const Dashboard = (props) =>{
     const {currentUser} = useAuth()
     const [searchType, setSearchType] = useState("crypto")
     const [searchInput, setSearchInput] = useState("")
-    const [loadingInvest, setLoadingInvest] = useState(false)
+    const [selectionsSubmitted, setSelectionsSubmitted] = useState(false)
     const [selectedInvestments, setSelectedInvestments] = useState([])
-    const totalInSelected = useRef("0")
+    //const totalInSelected = useRef("0")
     const topInvestment = 0
     const investmentTotal = 0
     const principalInvested = 0
@@ -65,9 +65,12 @@ const Dashboard = (props) =>{
     //update input field
     const onAddInvestFormChange = (e) =>{
         const index= e.target.dataset.index
+        const value = e.target.value
         const newSelections = [...selectedInvestments]
-        newSelections[index]["investedAmount"] = e.target.value.toString()
-        totalInSelected.current = parseInt(totalInSelected.current) + parseInt(e.target.value)
+        const testInput = /^\s*(?=.*[0-9])\d*(?:\.\d{1,2})?\s*$/
+        const invalidInput = value !== "" && !testInput.test(value) && value[value.length-1]!=="."
+        if(invalidInput) return
+        newSelections[index]["investedAmount"] = value.toString()
         setSelectedInvestments(newSelections)
     }
     //user selects the investment to add
@@ -81,8 +84,9 @@ const Dashboard = (props) =>{
             investmentType: searchType,
             name: name, 
             lastViewed: new Date(), 
-            symbol: symbol, 
-            currBalance: (parseInt(investmentTotal) + parseInt(totalInSelected.current)).toString()
+            symbol: symbol,
+            investedAmount:"0", 
+            prevBalance: "0"
         }
         newSelections.push(newSelected)
         setSelectedInvestments(newSelections)
@@ -92,36 +96,36 @@ const Dashboard = (props) =>{
     }
     //user deletes the investment from form
     const onDeleteInvestClick = (e) =>{
-        const investment = e.target.dataset.symbol
-        const index = e.target.dataset.index
-        const investAmount = selectedInvestments[index]["investedAmount"]
-        let newSelections = [...selectedInvestments]
-        //adjust currentBalance for investments after a deleted one
-        for(let i = index; i<newSelections.length;i++) newSelections[i]["currBalance"] -= investAmount 
-        
-        newSelections = newSelections.filter((invest)=>invest["symbol"]!==investment)
-        //update for an total balance for investments that are added
-        totalInSelected.current -= selectedInvestments[index]["investedAmount"]
+        const investment = e.target.closest("button").dataset.symbol
+        const newSelections = selectedInvestments.filter((invest)=>invest["symbol"]!==investment)
+        // //update total balance for investments to be added after
         setSelectedInvestments(newSelections)
     }
     //when user  submits form
     const onSaveInvestSubmit = async (e) =>{
         //prevent refresh
         e.preventDefault()
-        setLoadingInvest(true)
+        if(selectionsSubmitted) return
+        setSelectionsSubmitted(true)
+        let copySelections = [...selectedInvestments]
+        let accumalate = parseFloat(investmentTotal)
+        for(let selection of copySelections){
+            selection.prevBalance = accumalate.toFixed(2).toString()
+            accumalate += parseFloat(selection.investedAmount)
+        }
         const updatedInvest = {
             actionType: "addInvestment",
             token: currentUser.accessToken,
             searchType: searchType,
             trackedInvestments: [...userInfo.trackedInvestments],
             cashTransactions: [...userInfo.cashTransactions],
-            selectedInvestments: [...selectedInvestments],
+            selectedInvestments: [...copySelections],
             //store reducer to update userData after a call to get investment data values
             updateUserData: (e) => {dispatch(updateUserData(e))}
         }
         dispatch(getInvestData(updatedInvest))
         setSelectedInvestments([])
-        setLoadingInvest(false)
+        setSelectionsSubmitted(false)
     }
     
     return(
@@ -141,6 +145,7 @@ const Dashboard = (props) =>{
                     searchInput = {searchInput} 
                     searchType = {searchType}
                     searchResults = {searchResults}
+                    selectionsSubmitted = {selectionsSubmitted}
                     searchPlaceholder = {
                         searchType==="crypto" ? "BTC, Bitcoin, etherum, etc"
                         : searchType==="stock" ? "Apple, AAPL, tesla, etc"
