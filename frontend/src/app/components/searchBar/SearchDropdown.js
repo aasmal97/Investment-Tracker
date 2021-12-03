@@ -1,7 +1,7 @@
 import LoadingIcon from '../loadingIcon/LoadingIcon';
 import {far} from '@fortawesome/free-regular-svg-icons';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import {faSadCry} from '@fortawesome/free-solid-svg-icons';
+import {library } from '@fortawesome/fontawesome-svg-core';
+import {faSadCry, faPlus, faMinus} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 library.add(far, faSadCry)
 
@@ -31,10 +31,19 @@ const SearchDropdown = (props) =>{
                         key={investment[id]}
                         className = "d-flex justify-content-between w-100 align-items-center"
                         aria-label = "select-investment"
-                        onClick = {props.onClick}
+                        onClick = {props.onAddInvestClick}
+                        data-name= {investment[name]}
+                        data-ticker= {investment[symbol]}
                     >
                         <div className="w-25">{investment[symbol]}</div>
-                        <div className="w-50">{props.searchType === "crypto" ? investment[name] : `${investment[name]} (${investment.type})` }</div>
+                        <div className="w-50">
+                            {props.searchType === "crypto" ? investment[name] : `${investment[name]} (${investment.type})`}
+                        </div>
+                        {props.searchBarAdd || props.searchBarMinus ? 
+                            <div className="btn btn-success m-0 p-0 search-action-btn d-flex align-items-center justify-content-center">
+                                <FontAwesomeIcon icon={props.minus ? faMinus: faPlus}/>
+                            </div>
+                        :null}
                     </button>
                 )
             })}

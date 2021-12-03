@@ -17,7 +17,7 @@ const SearchBar = (props) =>{
                     className="form-control" 
                     id={props.id} 
                     placeholder={props.placeholder}
-                    onChange = {props.onChange}
+                    onChange = {props.onSearchChange}
                     value = {props.searchInput}
                 />
                 {props.searchResults.status ? 
@@ -30,7 +30,7 @@ const SearchBar = (props) =>{
                     data-search-type = "stock"
                     className = {`btn btn-${props.searchType === "stock" ? "secondary" : "dark"}`}
                     aria-label={"search-stock"}
-                    onClick = {props.onClick}
+                    onClick = {props.onSearchClick}
                 >
                     <FontAwesomeIcon icon= {faChartLine}/>
                 </button>
@@ -40,7 +40,7 @@ const SearchBar = (props) =>{
                     data-search-type ="crypto"
                     className = {`btn btn-${props.searchType === "crypto" ? "secondary" : "dark"}`}
                     aria-label={"search-crypto"}
-                    onClick = {props.onClick}
+                    onClick = {props.onSearchClick}
                 >
                     <FontAwesomeIcon icon= {faBitcoin}/>
                 </button>

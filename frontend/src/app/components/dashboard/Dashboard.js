@@ -1,6 +1,6 @@
 import {useRef, useEffect, useState } from "react"
 import {useDispatch, useSelector } from "react-redux";
-import { getUserData } from "../../../redux/features/userInfo/userInfoSlice";
+import { getUserData, updateUserData } from "../../../redux/features/userInfo/userInfoSlice";
 import { getInvestData } from "../../../redux/features/investData/investDataSlice";
 import {getSearchData, resetSearch} from "../../../redux/features/investData/searchInvestSlice"
 import { useAuth } from "../../contexts/AuthContext";
@@ -18,7 +18,21 @@ const Dashboard = (props) =>{
     const {currentUser} = useAuth()
     const [searchType, setSearchType] = useState("crypto")
     const [searchInput, setSearchInput] = useState("")
+    const [loadingInvest, setLoadingInvest] = useState(false)
     const [selectedInvestments, setSelectedInvestments] = useState([])
+    const totalInSelected = useRef("0")
+    const topInvestment = 0
+    const investmentTotal = 0
+    const principalInvested = 0
+    const investmentGains = 0
+    const percentChange = 0
+    const summaryLabels = [
+        {label: "Top Performing Investment", value: topInvestment},
+        {label: "Portfolio Total", value: investmentTotal},
+        {label: "Principal Invested", value: principalInvested},
+        {label: "Investment Gains", value: investmentGains},
+        {label: "Percent Change", value: percentChange}
+    ]
     useEffect(()=>{
         //only grab if store is not empty. We want to avoid too many requests
         if(userInfo._id === "") dispatch(getUserData(currentUser.accessToken))
@@ -32,16 +46,13 @@ const Dashboard = (props) =>{
         setSearchType(selectedSearchType)
         dispatch(resetSearch())
     }
-    
     const onSearchQuery = (keywords) =>{
         //if only white space, do not perform a search query
         const checkString = keywords.keywords
         if(!checkString.trim()) return dispatch(resetSearch())
         dispatch(getSearchData(keywords))
     }
-
     const debouncedSearchQuery = useRef(debounce((keywords) => onSearchQuery(keywords), 1000)).current;
-    
     const onSearchChange = (e) =>{
         const keywords = {
             type : searchType,
@@ -51,14 +62,83 @@ const Dashboard = (props) =>{
         setSearchInput(e.target.value)
         debouncedSearchQuery(keywords)
     }
+    //update input field
+    const onAddInvestFormChange = (e) =>{
+        const index= e.target.dataset.index
+        const newSelections = [...selectedInvestments]
+        newSelections[index]["investedAmount"] = e.target.value.toString()
+        totalInSelected.current = parseInt(totalInSelected.current) + parseInt(e.target.value)
+        setSelectedInvestments(newSelections)
+    }
+    //user selects the investment to add
+    const onAddInvestClick = (e) =>{
+        const name = e.target.closest("button").dataset.name
+        const symbol = e.target.closest("button").dataset.ticker
+        const newSelections = [...selectedInvestments]
+        //means it already exists
+        if(!newSelections.every((value) => value.symbol !== symbol)) return
+        const newSelected = {
+            investmentType: searchType,
+            name: name, 
+            lastViewed: new Date(), 
+            symbol: symbol, 
+            currBalance: (parseInt(investmentTotal) + parseInt(totalInSelected.current)).toString()
+        }
+        newSelections.push(newSelected)
+        setSelectedInvestments(newSelections)
+        //hide dropdown and reset query
+        dispatch(resetSearch())
+        setSearchInput("")
+    }
+    //user deletes the investment from form
+    const onDeleteInvestClick = (e) =>{
+        const investment = e.target.dataset.symbol
+        const index = e.target.dataset.index
+        const investAmount = selectedInvestments[index]["investedAmount"]
+        let newSelections = [...selectedInvestments]
+        //adjust currentBalance for investments after a deleted one
+        for(let i = index; i<newSelections.length;i++) newSelections[i]["currBalance"] -= investAmount 
+        
+        newSelections = newSelections.filter((invest)=>invest["symbol"]!==investment)
+        //update for an total balance for investments that are added
+        totalInSelected.current -= selectedInvestments[index]["investedAmount"]
+        setSelectedInvestments(newSelections)
+    }
+    //when user  submits form
+    const onSaveInvestSubmit = async (e) =>{
+        //prevent refresh
+        e.preventDefault()
+        setLoadingInvest(true)
+        const updatedInvest = {
+            actionType: "addInvestment",
+            token: currentUser.accessToken,
+            searchType: searchType,
+            trackedInvestments: [...userInfo.trackedInvestments],
+            cashTransactions: [...userInfo.cashTransactions],
+            selectedInvestments: [...selectedInvestments],
+            //store reducer to update userData after a call to get investment data values
+            updateUserData: (e) => {dispatch(updateUserData(e))}
+        }
+        dispatch(getInvestData(updatedInvest))
+        setSelectedInvestments([])
+        setLoadingInvest(false)
+    }
+    
     return(
         <div className="dashboard-container">
             <div className = {`d-flex w-100 ${!windowWidth && "flex-column align-items-center"}`}>
                 <DashboardSummary
+                    userInfo = {userInfo}
+                    onSearchClick = {onSearchBtnClick}
+                    onSearchChange = {onSearchChange}
+                    onSaveInvestSubmit = {onSaveInvestSubmit}
+                    onAddInvestClick = {onAddInvestClick}
+                    onDeleteInvestClick = {onDeleteInvestClick}
+                    onAddInvestFormChange = {onAddInvestFormChange}
+                    summaryLabels = {summaryLabels}
+                    selectedInvestments = {selectedInvestments}
                     searchInputId = {"search-input-id"}
                     searchInput = {searchInput} 
-                    onClick = {onSearchBtnClick}
-                    onChange = {onSearchChange}
                     searchType = {searchType}
                     searchResults = {searchResults}
                     searchPlaceholder = {
@@ -66,32 +146,23 @@ const Dashboard = (props) =>{
                         : searchType==="stock" ? "Apple, AAPL, tesla, etc"
                         : null
                     }
-                    summaryLabels = {
-                        [
-                            {label: "Top Performing Investment"},
-                            {label: "Investment Total"},
-                            {label: "Lifetime Cash Invested"},
-                            {label: "Yearly Change"}
-                        ]
-                    }
                 />
-                
                 <DashboardGraph 
                     className = "dashboard-all-investments-graph"
                     graphKey = {true}
-                    investments = {userInfo.tracked_investments}
+                    investments = {userInfo.trackedInvestments}
                 />
-
             </div>
             <div className = "d-flex flex-wrap justify-content-center w-100">
-                {userInfo.tracked_investments.length === 0 ?
-                    <>
-                        <div><p>You are not tracking any investments. Add one to get started</p></div>
-                    </>
-                : userInfo.tracked_investments.map((investment) => {
+                {userInfo.trackedInvestments.length === 1 && userInfo.trackedInvestments[0].name ==="" ?
+                    <div>
+                        <p>You are not tracking any investments. Add one to get started</p>
+                    </div>
+                : userInfo.trackedInvestments.map((investment) => {
                     return (
                         <DashboardCard 
                             investments = {[investment]}
+                            investmentData = {investmentData[investment.symbol]}
                         />
                     )
                 })}

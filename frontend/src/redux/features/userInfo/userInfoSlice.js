@@ -6,7 +6,11 @@ export const getUserData = createAsyncThunk("user/getUserData", async(token) =>{
     return await axios.get(backendAPI+"/user/"+token)
     .then((res) => res.data)
 })
-
+export const updateUserData = createAsyncThunk("user/updateUserData", async(userData) =>{
+    const backendAPI = process.env.REACT_APP_BACKEND_API
+    return await axios.put(backendAPI+"/user/"+userData.token, userData)
+    .then((res) => res.data)
+})
 export const userInfoSlice = createSlice({
     name: 'userInfo',
     initialState: {
@@ -16,10 +20,13 @@ export const userInfoSlice = createSlice({
         firstName : "",
         lastName : "",
         verifiedEmail: false,
-        connected_banks: [],
-        tracked_investments: [],
-        contact_settings: [],
+        cashTransactions:[{}],
+        trackedInvestments: [],
+        contactSettings: [],
+        topInvestment:{},
+        yearlyPercentChange: {},
         status: null,
+        updateStatus: "success"
     },
     extraReducers: {
         [getUserData.pending] : (state, action) =>{
@@ -28,12 +35,25 @@ export const userInfoSlice = createSlice({
         [getUserData.fulfilled]: (state, action) =>{
             state = action.payload
             state["status"] = "success";
+            state["updateStatus"] = "success"
             return state
         },
         [getUserData.rejected]: (state, action) =>{
             state.status = "failed"
-        }
-    }
+        },
+        [updateUserData.pending] : (state,action) =>{
+            state.updateStatus = "loading"
+        },
+        [updateUserData.fulfilled] : (state, action) =>{
+            state = {...state, ...action.payload} 
+            state["status"] = "success"
+            state["updateStatus"] = "success"
+            return state
+        },
+        [updateUserData.rejected]: (state, action) =>[
+            state.updateStatus = "failed"
+        ]
+    },
 })
 
 export default userInfoSlice.reducer

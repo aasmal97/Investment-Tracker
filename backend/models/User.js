@@ -4,14 +4,45 @@ const users = new mongoose.Schema({
     email: String,
     firstName: String,
     lastName: String,
-    tracked_investments: [{name: String, last_viewed: Date, abbreviation: String, invested_amount:Number}],
-    connected_banks: [String],
-    contact_settings: [String],
+    verifiedEmail: Boolean,
+    contactSettings: {type: Map, of:Boolean},
+    cashTransactions: [{
+        changeBy: String, 
+        currBalance: String}],
     metadata: {
         type: Map,
         of: String
     },
-    verifiedEmail: Boolean,
+    topInvestment: {
+        type:Map,
+        of: {
+            investmentType: String,
+            date: Date,
+            investmentName: String
+        }
+    },
+    yearlyPercentChange: {
+        type: Map,
+        of:{
+            date: Date,
+            investmentsOwned: [{
+                date: Date, 
+                investmentsOwned:[{name: String, investmentType: String}]
+            }]
+        }
+    },
+    trackedInvestments: [{
+        investmentType: String,
+        name: String, 
+        lastViewed: Date, 
+        symbol: String, 
+        investedAmount: String, 
+        dateAdded:{
+            date: Date, 
+            value: String
+        }
+    }],
 })
+
 const User = mongoose.model("User", users)
 module.exports = User;

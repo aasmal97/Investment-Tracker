@@ -9,10 +9,9 @@ router.route("/:token").put(async function (req, res, next) {
         const uid = decodedToken.uid;
         const userData = await User.findById(uid).exec()
         //update all new keys in userData
-        Object.keys(req.body).map((key) =>{
-            userData[key] = req.body[key]
-            return
-        })
+        delete req.body.token 
+        //update fields
+        userData = {...userData, ...req.body}
         [updateSuccess, error] = asyncWrapper(userData.save())
         return updateSuccess ? res.send(userData) : res.send(error)
     })

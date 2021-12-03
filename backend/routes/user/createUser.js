@@ -11,10 +11,21 @@ router.route("/").post(async function (req, res, next) {
         firstName : req.body.firstName,
         lastName : req.body.lastName,
         verifiedEmail: req.body.emailVerified,
-        connected_banks: [],
-        tracked_investments: [],
-        contact_settings: []
+        contactSettings: {promotional: true, userSpecific: true},
+        cashTransactions: [],
+        trackedInvestments: [],
+        topInvestment:{
+            prevTop:{}, 
+            currentTop: {}
+        },
+        yearlyPercentChange:{
+            startDate: {
+                date: new Date(), 
+                investmentsOwned: []
+            },
+        },
     }
+    
     const newUser = new User(newUserProps)
     const saveUser = () =>{
         newUser.save()
