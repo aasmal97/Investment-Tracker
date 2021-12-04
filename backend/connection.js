@@ -1,15 +1,14 @@
 const mongoose = require("mongoose");
-const nodeSchedule = require('node-schedule');
 const express = require("express");
 const app = express();
 const cors = require('cors')
 const admin = require('firebase-admin');
-const axios = require('axios')
-const CryptoCoin = require("./models/CryptoCoin")
+const updateCoinList = require('./updateCoinList')
 
 //import routes
 const userRoutes = require("./routes/user/user");
 const searchRoutes = require('./routes/investments/searchInvestments')
+const investmentDataRoutes = require("./routes/investments/investmentData")
 //local variables
 require("dotenv").config({ path: "./config.env" });
 
@@ -52,30 +51,15 @@ mongoose.connection.on("connected", function(ref){
     // add routes
     app.use('/user', userRoutes)
     app.use('/searchInvestments', searchRoutes)
+    app.use('/investmentData', investmentDataRoutes)
     //listen to port
     const listener = app.listen(process.env.PORT||7000, ()=>{
         console.log("server running on port " + listener.address().port)
     })
-    //automatic scheduler to update cryto options every 1st of the month, at 3am
-    nodeSchedule.scheduleJob('3 1 * *', async () =>{
-        const coinListData = await axios.get("https://min-api.cryptocompare.com/data/all/coinlist")
-        if(coinListData.data.Response === "Error") return console.error(coinListData.data.Message)
-        
-        const coinData = coinListData.data.Data
-        //grab all coin data listings, and update mongodb database
-        const coinArr = Object.keys(coinData).map((key) =>{
-            return new CryptoCoin({
-                _id: key,
-                name: coinData[key].Name,
-                symbol: coinData[key].Symbol,
-                coinName: coinData[key].CoinName,
-                fullName: coinData[key].FullName, 
-                description: coinData[key].Description
-            })
-        })
-
-        return CryptoCoin.insertMany(coinArr,{ ordered: false }).catch(e => console.error(e))
-    })
+    //call auto updating function for our coinlist
+    //needed to provide a good search experience
+    updateCoinList();  
+    
 })
 
 mongoose.connection.on("error", function(err) {

@@ -16,7 +16,7 @@ router.route("/:token/:type/:keywords").get(async function (req, res, next) {
             //and return at most 10 top matches
             [searchResults, error] = await asyncWrapper(
                     CryptoCoin.aggregate().search({
-                        index: 'cryptocoins_custom',
+                        index: 'cryptocoinsSearch',
                         text: {
                             query: req.params.keywords,
                             path: ["fullName","symbol"]

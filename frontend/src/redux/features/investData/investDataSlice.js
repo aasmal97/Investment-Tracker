@@ -5,7 +5,7 @@ export const getInvestData = createAsyncThunk("user/getInvestData", async(invest
     const backendAPI = process.env.REACT_APP_BACKEND_API
     switch(investData.actionType){
         case "addInvestment":
-            const response = await axios.get(backendAPI+"/getInvestmentData/"+investData.token+"/"+investData.selectedInvestments)
+            const response = await axios.get(backendAPI+"/investmentData/"+investData.token+"/"+JSON.stringify(investData.selectedInvestments))
             .then((res) => res.data).catch((e) => {return {errorMessage: e, error: true}})
             if(response.error) throw new Error("Updating Investment Data Failed") 
             const newData = {
@@ -20,7 +20,7 @@ export const getInvestData = createAsyncThunk("user/getInvestData", async(invest
                     ...key,
                     dateAdded:{
                         date: key.dateAdded.date,
-                        value: response.averageValue
+                        value: response[key.investmentType][key.symbol].currValue
                     }
                 })
                 //delete unneeded keys
@@ -55,6 +55,9 @@ export const investDataSlice = createSlice({
         },
         [getInvestData.rejected]: (state, action) =>{
             state.status = "failed"
+            setTimeout(() =>{
+                state.status = null
+            }, 5000)
         }
     }
 })

@@ -20,7 +20,7 @@ const Dashboard = (props) =>{
     const [searchInput, setSearchInput] = useState("")
     const [selectionsSubmitted, setSelectionsSubmitted] = useState(false)
     const [selectedInvestments, setSelectedInvestments] = useState([])
-    //const totalInSelected = useRef("0")
+    const [trackingWarning, setTrackingWarning] = useState(false)
     const topInvestment = 0
     const investmentTotal = 0
     const principalInvested = 0
@@ -79,14 +79,25 @@ const Dashboard = (props) =>{
         const symbol = e.target.closest("button").dataset.ticker
         const newSelections = [...selectedInvestments]
         //means it already exists
-        if(!newSelections.every((value) => value.symbol !== symbol)) return
+        const checkSelected = !newSelections.every((value) => value.symbol !== symbol || value.symbol === symbol && value.investmentType !== searchType)
+        const checkTracked = !userInfo.trackedInvestments.every((value) => value.symbol !== symbol || value.symbol === symbol && value.investmentType !== searchType)
+        if(checkSelected || checkTracked) {
+            setTrackingWarning(true)
+            setTimeout(() => {
+                setTrackingWarning(false)
+            },3000)
+            return
+        }
         const newSelected = {
             investmentType: searchType,
             name: name, 
             lastViewed: new Date(), 
             symbol: symbol,
             investedAmount:"0", 
-            prevBalance: "0"
+            prevBalance: "0",
+            dateAdded:{
+                date: new Date(),
+            }
         }
         newSelections.push(newSelected)
         setSelectedInvestments(newSelections)
@@ -98,7 +109,7 @@ const Dashboard = (props) =>{
     const onDeleteInvestClick = (e) =>{
         const investment = e.target.closest("button").dataset.symbol
         const newSelections = selectedInvestments.filter((invest)=>invest["symbol"]!==investment)
-        // //update total balance for investments to be added after
+        //update total balance for investments to be added after
         setSelectedInvestments(newSelections)
     }
     //when user  submits form
@@ -130,6 +141,13 @@ const Dashboard = (props) =>{
     
     return(
         <div className="dashboard-container">
+            {trackingWarning && <div className="alert alert-danger dashboard-tracking-warning">
+                    You have already selected, or are tracking this investment
+                </div>}
+            {investmentData.status ==="failed" && <div className="alert alert-danger dashboard-tracking-warning">
+                    We were unable to find data on one of your investments. Please contact 
+                    <a href="mailto:arkyasmal@gmail.com"> arkyasmal@gmail.com</a> for more details.  
+            </div>}
             <div className = {`d-flex w-100 ${!windowWidth && "flex-column align-items-center"}`}>
                 <DashboardSummary
                     userInfo = {userInfo}
