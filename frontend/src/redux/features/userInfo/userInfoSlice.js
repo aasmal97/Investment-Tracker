@@ -1,15 +1,25 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from "axios";
 // fetch data from database
-export const getUserData = createAsyncThunk("user/getUserData", async(token) =>{
+export const getUserData = createAsyncThunk("user/getUserData", async(requestData) =>{
     const backendAPI = process.env.REACT_APP_BACKEND_API
-    return await axios.get(backendAPI+"/user/"+token)
-    .then((res) => res.data)
+    return await axios.get(backendAPI+"/user/"+requestData.token)
+    .then((res) => {
+        //check if we need to update investment data too
+        if(requestData.investmentData) {
+            requestData.investmentData({
+                token: requestData.token, 
+                trackedInvestments: res.data.trackedInvestments,
+                actionType: requestData.actionType
+            }) 
+        }
+        return res.data
+    })
 })
 export const updateUserData = createAsyncThunk("user/updateUserData", async(userData) =>{
     const backendAPI = process.env.REACT_APP_BACKEND_API
     return await axios.put(backendAPI+"/user/"+userData.token, userData)
-    .then((res) => res.data)
+    .then((res) =>  res.data)
 })
 export const userInfoSlice = createSlice({
     name: 'userInfo',

@@ -35,7 +35,12 @@ const Dashboard = (props) =>{
     ]
     useEffect(()=>{
         //only grab if store is not empty. We want to avoid too many requests
-        if(userInfo._id === "") dispatch(getUserData(currentUser.accessToken))
+        const requestData = {
+            token: currentUser.accessToken, 
+            actionType:"initialLoad", 
+            investmentData: (e) => {dispatch(getInvestData(e))}
+        }
+        if(userInfo._id === "") dispatch(getUserData(requestData))
     }, [dispatch, currentUser.accessToken, userInfo._id])
     //get investment data
     // useEffect(() =>{

@@ -5,6 +5,7 @@ const users = new mongoose.Schema({
     firstName: String,
     lastName: String,
     verifiedEmail: Boolean,
+    investmentHistoryId: mongoose.Schema.Types.ObjectId,
     contactSettings: {type: Map, of:Boolean},
     cashTransactions: [{
         changeBy: String, 
