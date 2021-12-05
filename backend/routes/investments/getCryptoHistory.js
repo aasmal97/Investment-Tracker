@@ -1,6 +1,5 @@
 const axios = require('axios')
 const asyncWrapper = require("../../asyncWrapper")
-const InvestmentHistory = require("../../models/InvestmentHistory")
 const checkApiCall = (storedInvestmentDataMap, investmentType, symbol) => {
     //investment has not once been tracked
     const currHistoryArr = storedInvestmentDataMap[investmentType]
@@ -17,13 +16,12 @@ const getCryptoHistory = async (storedInvestmentData, storedInvestmentDataMap, s
     const dataPointsToRequest = checkApiCall(storedInvestmentDataMap,"crypto", symbol)
     //if no data points missing, dont make an api call (meaning it was recently updated)
     if(!dataPointsToRequest) return ["continue", null];
-    console.log("requestMade")
     const [cryptoData, cryptoError] = await asyncWrapper(
         axios.get(`https://min-api.cryptocompare.com/data/v2/histoday?fsym=${symbol}&tsym=USD&limit=${dataPointsToRequest}`)
     )
     //only continue if api call succeeded
-    if(!cryptoData.data.Data){
-        console.error(cryptoError)
+    if(!cryptoData.data.Data || !cryptoData.data.Data.Data){
+        console.error(cryptoError, cryptoData.data? cryptoData.data : null)
         res.send({error: cryptoData.data.Message, investmentCause: symbol})
         return [null,{error: cryptoData.data.Message, investmentCause: symbol}]
     }  

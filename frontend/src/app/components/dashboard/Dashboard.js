@@ -1,7 +1,7 @@
 import {useRef, useEffect, useState } from "react"
 import {useDispatch, useSelector } from "react-redux";
-import { getUserData, updateUserData } from "../../../redux/features/userInfo/userInfoSlice";
-import { getInvestData } from "../../../redux/features/investData/investDataSlice";
+import { getUserData, updateUserData, resetUserDataStatus} from "../../../redux/features/userInfo/userInfoSlice";
+import { getInvestData, resetInvestHistoryStatus} from "../../../redux/features/investData/investDataSlice";
 import {getSearchData, resetSearch} from "../../../redux/features/investData/searchInvestSlice"
 import { useAuth } from "../../contexts/AuthContext";
 import DashboardCard from "./DashboardCard"
@@ -38,7 +38,9 @@ const Dashboard = (props) =>{
         const requestData = {
             token: currentUser.accessToken, 
             actionType:"initialLoad", 
-            investmentData: (e) => {dispatch(getInvestData(e))}
+            investmentData: (e) => {dispatch(getInvestData(e))},
+            resetUserDataStatus : () => {dispatch(resetUserDataStatus())},
+            resetInvestHistoryStatus: () => {dispatch(resetInvestHistoryStatus())}
         }
         if(userInfo._id === "") dispatch(getUserData(requestData))
     }, [dispatch, currentUser.accessToken, userInfo._id])
@@ -137,7 +139,9 @@ const Dashboard = (props) =>{
             cashTransactions: [...userInfo.cashTransactions],
             selectedInvestments: [...copySelections],
             //store reducer to update userData after a call to get investment data values
-            updateUserData: (e) => {dispatch(updateUserData(e))}
+            updateUserData: (e) => {dispatch(updateUserData(e))},
+            resetUserDataStatus : () => {dispatch(resetUserDataStatus())},
+            resetInvestHistoryStatus: () => {dispatch(resetInvestHistoryStatus())}
         }
         dispatch(getInvestData(updatedInvest))
         setSelectedInvestments([])
@@ -150,8 +154,11 @@ const Dashboard = (props) =>{
                     You have already selected, or are tracking this investment
                 </div>}
             {investmentData.status ==="failed" && <div className="alert alert-danger dashboard-tracking-warning">
-                    We were unable to find data on one of your investments. Please contact 
-                    <a href="mailto:arkyasmal@gmail.com"> arkyasmal@gmail.com</a> for more details.  
+                    We were unable to find data 
+                    {investmentData.errorSymbolCause ? 
+                        ` on the following investment: ${investmentData.errorSymbolCause}.`
+                    :"on one or more of your investments."} Please contact {" "}
+                    <a href="mailto:arkyasmal@gmail.com">arkyasmal@gmail.com</a> for more details.  
             </div>}
             <div className = {`d-flex w-100 ${!windowWidth && "flex-column align-items-center"}`}>
                 <DashboardSummary

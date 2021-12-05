@@ -1,9 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from "axios";
+
 const addInvestments = async (backendAPI, investData, investments) =>{
     const response = await axios.get(backendAPI+"/investmentData/"+investData.token+"/"+JSON.stringify(investData[investments]))
     .then((res) => res.data).catch((e) => {return {errorMessage: e, error: true}})
-    if(response.error) throw new Error("Updating Investment Data Failed")
+    if(response.error) {
+        console.error(response)
+        setTimeout(() => investData.resetInvestHistoryStatus(), 4500)
+        throw new Error("-"+response.investmentCause)
+    }
     const newData = {
         token: investData.token,
         trackedInvestments: investData.trackedInvestments,
@@ -28,9 +33,21 @@ const addInvestments = async (backendAPI, investData, investments) =>{
     }
     //update userInfo state
     investData.updateUserData(newData)
+    //reset status
+    setTimeout(() => investData.resetInvestHistoryStatus(), 4500)
     return response
 }
-
+const initialLoad = async (backendAPI, investData) => {
+    const response = await axios.get(`${backendAPI}/investmentData/${investData.token}/${JSON.stringify(investData.trackedInvestments)}/${investData.actionType}`)
+    .then((res) => res.data).catch((e) => {return {errorMessage: e, error: true}})
+    if(response.error) {
+        setTimeout(() => investData.resetInvestHistoryStatus(), 4500)
+        console.error(response)
+        throw new Error("-"+response.investmentCause)
+    }
+    setTimeout(() => investData.resetInvestHistoryStatus(), 4500)
+    return response
+}
 // fetch data from database
 export const getInvestData = createAsyncThunk("user/getInvestData", async(investData) =>{
     const backendAPI = process.env.REACT_APP_BACKEND_API
@@ -38,10 +55,7 @@ export const getInvestData = createAsyncThunk("user/getInvestData", async(invest
         case "addInvestment":
             return addInvestments(backendAPI, investData, "selectedInvestments")
         case "initialLoad":
-            const response = await axios.get(`${backendAPI}/investmentData/${investData.token}/${JSON.stringify(investData.trackedInvestments)}/${investData.actionType}`)
-            .then((res) => res.data).catch((e) => {return {errorMessage: e, error: true}})
-            if(response.error) throw new Error("Updating Investment Data Failed")
-            return response
+            return initialLoad(backendAPI, investData)
         default:
             return console.error("No action type matched")
     }
@@ -73,12 +87,22 @@ export const investDataSlice = createSlice({
                 }
             }
             state["status"] = "success";
+            
             return state
         },
         [getInvestData.rejected]: (state, action) =>{
             state["status"] = "failed"
+            if(/[-]+/.test(!action.error.message)) return state
+            state["errorSymbolCause"] = action.error.message.substring(1)
+        }
+    },
+    reducers:{
+        resetInvestHistoryStatus: (state) => {
+            state["status"] = null
+            return state
         }
     }
 })
+export const { resetInvestHistoryStatus } = investDataSlice.actions
 
 export default investDataSlice.reducer

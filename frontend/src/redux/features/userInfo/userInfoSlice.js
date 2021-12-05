@@ -8,12 +8,17 @@ export const getUserData = createAsyncThunk("user/getUserData", async(requestDat
         //check if we need to update investment data too
         if(requestData.investmentData) {
             requestData.investmentData({
+                resetInvestHistoryStatus: requestData.resetInvestHistoryStatus,
                 token: requestData.token, 
                 trackedInvestments: res.data.trackedInvestments,
                 actionType: requestData.actionType
             }) 
         }
+        if(requestData.resetUserDataStatus) setTimeout(() => requestData.resetUserDataStatus(), 4500)
         return res.data
+    }).catch((e) =>{
+        setTimeout(() => requestData.resetUserDataStatus(), 4500)
+        throw new Error("Updating your profile failed")
     })
 })
 export const updateUserData = createAsyncThunk("user/updateUserData", async(userData) =>{
@@ -64,6 +69,13 @@ export const userInfoSlice = createSlice({
             state.updateStatus = "failed"
         ]
     },
+    reducers:{
+        resetUserDataStatus: (state) => {
+            state["status"] = null
+            return state
+        }
+    }
 })
+export const { resetUserDataStatus } = userInfoSlice.actions
 
 export default userInfoSlice.reducer

@@ -53,12 +53,3 @@ router.route("/:token/:investments/:actionType?").get(async function (req, res, 
 });
 
 module.exports = router
-// const [cryptoData, cryptoError] = await asyncWrapper(
-//     axios.get(`https://min-api.cryptocompare.com/data/v2/histoday?fsym=${investment.symbol}&tsym=USD&limit=30`)
-// )
-// if(cryptoData.data.Data) {
-//     let coinDataArr = cryptoData.data.Data
-//     storedInvestmentData.crypto[investment.symbol] = coinDataArr
-//     //grab most recent closing time values
-//     storedInvestmentData.crypto[investment.symbol]["currValue"] = coinDataArr.Data[coinDataArr.Data.length-1].close
-// }
