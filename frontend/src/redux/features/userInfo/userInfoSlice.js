@@ -38,8 +38,6 @@ export const userInfoSlice = createSlice({
         cashTransactions:[{}],
         trackedInvestments: [],
         contactSettings: [],
-        topInvestment:{},
-        yearlyPercentChange: {},
         status: null,
         updateStatus: "success"
     },

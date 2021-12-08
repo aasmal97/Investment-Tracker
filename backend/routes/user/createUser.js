@@ -16,24 +16,42 @@ router.route("/").post(async function (req, res, next) {
         lastName : req.body.lastName,
         verifiedEmail: req.body.emailVerified,
         contactSettings: {promotional: true, userSpecific: true},
-        cashTransactions: [],
         trackedInvestments: [],
-        topInvestment:{
-            prevTop:{}, 
-            currentTop: {}
-        },
-        yearlyPercentChange:{
-            startDate: {
-                date: new Date(), 
-                investmentsOwned: []
-            },
-        },
     }
+    const currDate =  new Date()
     const newInvestmentHistoryProps = {
         _id: investmentHistoryId,
         userId: req.body.uid,
         crypto:[],
         stock:[],
+        investmentTotal: "0.00",
+        principalInvested: "0.00",
+        investmentGains: "0.00",
+        topInvestment:{
+            investmentType: "",
+            investmentName: "",
+            investmentSymbol: "",
+            date: currDate,
+            percentChange: "0.00",
+        },
+        lowestInvestment:{
+            investmentType: "",
+            investmentName: "",
+            investmentSymbol: "",
+            date: currDate,
+            percentChange: "0.00",
+        },
+        yearlyPercentChange:{
+            startDate:{
+                date: currDate,
+                principal: "0.00",
+            },
+            endDate:{
+                date: currDate,
+                principal: "0.00",
+            },
+            yearsDiff:"0.00"
+        }
     }
     const newInvestmentHistory = new InvestmentHistory(newInvestmentHistoryProps)
     const newUser = new User(newUserProps)
@@ -45,7 +63,7 @@ router.route("/").post(async function (req, res, next) {
     }
 
     const [welcomeMessage, error] = await asyncWrapper(saveUser())
-    
+
     return welcomeMessage ? res.send(welcomeMessage) : res.send(error)
 });
 

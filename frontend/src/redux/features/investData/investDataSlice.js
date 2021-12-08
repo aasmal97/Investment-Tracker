@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from "axios";
 
 const addInvestments = async (backendAPI, investData, investments) =>{
-    const response = await axios.get(backendAPI+"/investmentData/"+investData.token+"/"+JSON.stringify(investData[investments]))
+    const response = await axios.post(`${backendAPI}/investmentData/${investData.token}/${investData.actionType}`, investData[investments])
     .then((res) => res.data).catch((e) => {return {errorMessage: e, error: true}})
     if(response.error) {
         console.error(response)
@@ -12,7 +12,6 @@ const addInvestments = async (backendAPI, investData, investments) =>{
     const newData = {
         token: investData.token,
         trackedInvestments: investData.trackedInvestments,
-        cashTransactions: investData.cashTransactions,
     }
     for(let key of investData.selectedInvestments){
         let currInvest = newData.trackedInvestments
@@ -28,8 +27,7 @@ const addInvestments = async (backendAPI, investData, investments) =>{
         //delete unneeded keys
         delete currInvest[currInvest.length-1].investedAmount
         delete currInvest[currInvest.length-1].prevBalance
-        //update cashTransactions data
-        newData.cashTransactions.push({changeBy: key.investedAmount, prevBalance: key.prevBalance})
+        
     }
     //update userInfo state
     investData.updateUserData(newData)
@@ -38,7 +36,7 @@ const addInvestments = async (backendAPI, investData, investments) =>{
     return response
 }
 const initialLoad = async (backendAPI, investData) => {
-    const response = await axios.get(`${backendAPI}/investmentData/${investData.token}/${JSON.stringify(investData.trackedInvestments)}/${investData.actionType}`)
+    const response = await axios.post(`${backendAPI}/investmentData/${investData.token}/${investData.actionType}`, investData.trackedInvestments)
     .then((res) => res.data).catch((e) => {return {errorMessage: e, error: true}})
     if(response.error) {
         setTimeout(() => investData.resetInvestHistoryStatus(), 4500)

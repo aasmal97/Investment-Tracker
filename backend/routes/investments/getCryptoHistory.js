@@ -12,7 +12,10 @@ const checkApiCall = (storedInvestmentDataMap, investmentType, symbol) => {
     const dayDifference = Math.floor((currDate - checkLastUpdate) / 86400000)
     return dayDifference===0 ? null : dayDifference
 }
-const getCryptoHistory = async (storedInvestmentData, storedInvestmentDataMap, symbol, changedData, res) =>{
+const getCryptoHistory = async (storedInvestmentData, storedInvestmentDataMap, investment, changedData, res) =>{
+    const symbol = investment.symbol
+    const name = investment.name
+    const investedAmount = investment.investedAmount
     const dataPointsToRequest = checkApiCall(storedInvestmentDataMap,"crypto", symbol)
     //if no data points missing, dont make an api call (meaning it was recently updated)
     if(!dataPointsToRequest) return ["continue", null];
@@ -29,22 +32,29 @@ const getCryptoHistory = async (storedInvestmentData, storedInvestmentDataMap, s
     //add new array values to our database storage
     let coinDataArr = cryptoData.data.Data.Data
     let storedMapCoinData = storedInvestmentDataMap.crypto[symbol]
-
+    //if we are already tracking this investment
     if(storedMapCoinData){
+        const storedCryptoData = storedInvestmentData.crypto[storedMapCoinData.index]
+        const prevClosePrice = storedCryptoData.data[storedCryptoData.data.length-1].close
+        const prevInvestedAmount = storedCryptoData.investedAmount
+        const newInvestAmount = (coinDataArr[coinDataArr.length-1] / prevClosePrice) * prevInvestedAmount
+        
         changedData.crypto[symbol] = [...storedMapCoinData, ...coinDataArr]
-        storedInvestmentData.crypto[storedMapCoinData.index] = {symbol: symbol, data: changedData.crypto[symbol]}
+        storedInvestmentData.crypto[storedMapCoinData.index] = {
+            ...storedInvestmentData.crypto[storedMapCoinData.index],
+            symbol: symbol, 
+            data: changedData.crypto[symbol], 
+            investedAmount: newInvestAmount,
+        }
     }
+    //if we arent already tracking this investment
     else{
         changedData.crypto[symbol] = [...coinDataArr],
-        storedInvestmentData.crypto.push({symbol: symbol, data: changedData.crypto[symbol]})
+        storedInvestmentData.crypto.push({name: name, symbol: symbol, data: changedData.crypto[symbol], investedAmount: investedAmount, initialValue: coinDataArr[coinDataArr.length-1].close.toString()})
     }
+    return ["continue", null]
+
     
-    const [saveSuccess, saveError] = await asyncWrapper(storedInvestmentData.save())
- 
-    if(!saveError) return ["continue", null];
-    console.error(saveError)
-    res.send({error: "Could not save this investment", investmentCause: symbol})
-    return [null, {error: "Could not save this investment", investmentCause: symbol}]
 }
 
 module.exports = getCryptoHistory

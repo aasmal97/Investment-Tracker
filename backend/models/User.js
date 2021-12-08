@@ -7,30 +7,9 @@ const users = new mongoose.Schema({
     verifiedEmail: Boolean,
     investmentHistoryId: mongoose.Schema.Types.ObjectId,
     contactSettings: {type: Map, of:Boolean},
-    cashTransactions: [{
-        changeBy: String, 
-        prevBalance: String}],
     metadata: {
         type: Map,
         of: String
-    },
-    topInvestment: {
-        type:Map,
-        of: {
-            investmentType: String,
-            date: Date,
-            investmentName: String
-        }
-    },
-    yearlyPercentChange: {
-        type: Map,
-        of:{
-            date: Date,
-            investmentsOwned: [{
-                date: Date, 
-                investmentsOwned:[{name: String, investmentType: String}]
-            }]
-        }
     },
     trackedInvestments: [{
         investmentType: String,

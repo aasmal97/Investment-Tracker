@@ -21,18 +21,13 @@ const Dashboard = (props) =>{
     const [selectionsSubmitted, setSelectionsSubmitted] = useState(false)
     const [selectedInvestments, setSelectedInvestments] = useState([])
     const [trackingWarning, setTrackingWarning] = useState(false)
-    const topInvestment = 0
-    const investmentTotal = 0
-    const principalInvested = 0
-    const investmentGains = 0
-    const percentChange = 0
-    const summaryLabels = [
-        {label: "Top Performing Investment", value: topInvestment},
-        {label: "Portfolio Total", value: investmentTotal},
-        {label: "Principal Invested", value: principalInvested},
-        {label: "Investment Gains", value: investmentGains},
-        {label: "Percent Change", value: percentChange}
-    ]
+    const summaryLabels = investmentData._id !== "" ? [
+        {label: "Top Performing Investment", value: investmentData.topInvestment, percentage: investmentData.topInvestment.percentChange},
+        {label: "Portfolio Total", value: "$" + investmentData.investmentTotal},
+        {label: "Principal Invested", value: "$" + investmentData.principalInvested},
+        {label: "Investment Gains", value: "$" + investmentData.investmentGains},
+        {label: "Percent Change", value: investmentData.yearlyPercentChange, percentage: investmentData.yearlyPercentChange}
+    ] : null
     useEffect(()=>{
         //only grab if store is not empty. We want to avoid too many requests
         const requestData = {
@@ -44,10 +39,7 @@ const Dashboard = (props) =>{
         }
         if(userInfo._id === "") dispatch(getUserData(requestData))
     }, [dispatch, currentUser.accessToken, userInfo._id])
-    //get investment data
-    // useEffect(() =>{
-        
-    // }, [dispatch])
+
     const onSearchBtnClick = (e) =>{
         const selectedSearchType = e.target.closest("button").dataset.searchType
         setSearchType(selectedSearchType)
@@ -86,24 +78,25 @@ const Dashboard = (props) =>{
         const symbol = e.target.closest("button").dataset.ticker
         const newSelections = [...selectedInvestments]
         //means it already exists
-        const checkSelected = !newSelections.every((value) => value.symbol !== symbol || value.symbol === symbol && value.investmentType !== searchType)
-        const checkTracked = !userInfo.trackedInvestments.every((value) => value.symbol !== symbol || value.symbol === symbol && value.investmentType !== searchType)
+        const checkSelected = !newSelections.every((value) => (value.symbol !== symbol) || (value.symbol === symbol && value.investmentType !== searchType))
+        const checkTracked = !userInfo.trackedInvestments.every((value) => (value.symbol !== symbol) || (value.symbol === symbol && value.investmentType !== searchType))
         if(checkSelected || checkTracked) {
             setTrackingWarning(true)
             setTimeout(() => {
                 setTrackingWarning(false)
-            },3000)
+            }, 4000)
             return
         }
+        const currDate = new Date()
         const newSelected = {
             investmentType: searchType,
             name: name, 
-            lastViewed: new Date(), 
+            lastViewed: currDate,
             symbol: symbol,
             investedAmount:"0", 
             prevBalance: "0",
             dateAdded:{
-                date: new Date(),
+                date: currDate,
             }
         }
         newSelections.push(newSelected)
@@ -126,7 +119,7 @@ const Dashboard = (props) =>{
         if(selectionsSubmitted) return
         setSelectionsSubmitted(true)
         let copySelections = [...selectedInvestments]
-        let accumalate = parseFloat(investmentTotal)
+        let accumalate = parseFloat(investmentData.investmentTotal)
         for(let selection of copySelections){
             selection.prevBalance = accumalate.toFixed(2).toString()
             accumalate += parseFloat(selection.investedAmount)
@@ -136,7 +129,7 @@ const Dashboard = (props) =>{
             token: currentUser.accessToken,
             searchType: searchType,
             trackedInvestments: [...userInfo.trackedInvestments],
-            cashTransactions: [...userInfo.cashTransactions],
+            cashTransactions: [...investmentData.cashTransactions],
             selectedInvestments: [...copySelections],
             //store reducer to update userData after a call to get investment data values
             updateUserData: (e) => {dispatch(updateUserData(e))},
@@ -196,6 +189,7 @@ const Dashboard = (props) =>{
                 : userInfo.trackedInvestments.map((investment) => {
                     return (
                         <DashboardCard 
+                            key = {investment.investmentType + investment.symbol}
                             investments = {[investment]}
                             investmentData = {investmentData[investment.symbol]}
                         />
