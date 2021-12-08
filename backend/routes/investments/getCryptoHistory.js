@@ -33,13 +33,14 @@ const getCryptoHistory = async (storedInvestmentData, storedInvestmentDataMap, i
     let coinDataArr = cryptoData.data.Data.Data
     let storedMapCoinData = storedInvestmentDataMap.crypto[symbol]
     //if we are already tracking this investment
+    //console.log(storedMapCoinData )
     if(storedMapCoinData){
         const storedCryptoData = storedInvestmentData.crypto[storedMapCoinData.index]
         const prevClosePrice = storedCryptoData.data[storedCryptoData.data.length-1].close
         const prevInvestedAmount = storedCryptoData.investedAmount
         const newInvestAmount = (coinDataArr[coinDataArr.length-1] / prevClosePrice) * prevInvestedAmount
         
-        changedData.crypto[symbol] = [...storedMapCoinData, ...coinDataArr]
+        changedData.crypto[symbol] = [...storedMapCoinData.data, ...coinDataArr]
         storedInvestmentData.crypto[storedMapCoinData.index] = {
             ...storedInvestmentData.crypto[storedMapCoinData.index],
             symbol: symbol, 
@@ -52,9 +53,7 @@ const getCryptoHistory = async (storedInvestmentData, storedInvestmentDataMap, i
         changedData.crypto[symbol] = [...coinDataArr],
         storedInvestmentData.crypto.push({name: name, symbol: symbol, data: changedData.crypto[symbol], investedAmount: investedAmount, initialValue: coinDataArr[coinDataArr.length-1].close.toString()})
     }
-    return ["continue", null]
-
-    
+    return ["continue", null]    
 }
 
 module.exports = getCryptoHistory

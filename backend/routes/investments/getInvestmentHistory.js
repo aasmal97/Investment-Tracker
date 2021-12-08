@@ -31,7 +31,6 @@ router.route("/:token/:actionType?").post(async function (req, res, next) {
         let storedInvestmentDataMap = {_id: storedInvestmentData._id, userId: decodedToken.uid, crypto:{}, stock:{}}
         for(let i in storedInvestmentData.crypto) storedInvestmentDataMap.crypto[storedInvestmentData.crypto[i].symbol] = {index:i, data: storedInvestmentData.crypto[i].data}
         for(let i in storedInvestmentData.stock) storedInvestmentDataMap.stock[storedInvestmentData.stock[i].symbol] = {index:i, data: storedInvestmentData.stock[i].data}
-
         //loop through all investments and check if we already have a history of them
         for (let investment of investments){
             switch(investment.investmentType){
@@ -108,7 +107,8 @@ router.route("/:token/:actionType?").post(async function (req, res, next) {
         let netDeposits = storedYearlyPercent.endDate.principal - startingBalance
         let adjustedEndingBalance = storedInvestmentData.investmentTotal - netDeposits
         let yearlyReturn = ( (adjustedEndingBalance/startingBalance) - 1 ) * 100
-        investmentDataChanged.yearlyPercentChange = yearlyReturn.toFixed(2).toString()
+        if(startingBalance === "0.00" || "0" || 0) investmentDataChanged.yearlyPercentChange = "0.00"
+        else investmentDataChanged.yearlyPercentChange = yearlyReturn.toFixed(2).toString()
     
     //calculate top and low performing investments
         const checkTopInvestment = (top, low, data, type) => {
@@ -135,7 +135,7 @@ router.route("/:token/:actionType?").post(async function (req, res, next) {
                     }
                 }
             }
-            console.log(top,low)
+            
             return [top, low]   
         }
         let topInvestment = storedInvestmentData.topInvestment
