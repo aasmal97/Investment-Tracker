@@ -59,7 +59,6 @@ mongoose.connection.on("connected", function(ref){
     //call auto updating function for our coinlist
     //needed to provide a good search experience
     updateCoinList();  
-    
 })
 
 mongoose.connection.on("error", function(err) {
@@ -87,3 +86,4 @@ try{
 } catch (err){
     console.log("Sever initialization failed" , err.message);
 }
+
