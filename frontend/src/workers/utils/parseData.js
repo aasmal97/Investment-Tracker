@@ -1,6 +1,7 @@
 //loops over every data value once. This can reach up to 1000-5000 at a time.
 // benefits from web workers
-
+//generate random pastel colors
+import pastelColors from "../../utilityFunc/pastelColors"
 const parseData = ({
     data, 
     trackedInvestments
@@ -25,7 +26,7 @@ const parseData = ({
             key: key,
             values: data.crypto[key],
             investmentType: "crypto", 
-            color: investment.color,
+            color: investment && investment.color? investment.color: pastelColors(),
             dataMin: minMax[0],
             dataMax: minMax[1]
         } 
@@ -42,7 +43,7 @@ const parseData = ({
             key: key,
             values: data.stock[key],
             investmentType: "stock",
-            color: investment.color,
+            color: investment && investment.color? investment.color: pastelColors(),
             dataMin: minMax[0],
             dataMax: minMax[1]
         }

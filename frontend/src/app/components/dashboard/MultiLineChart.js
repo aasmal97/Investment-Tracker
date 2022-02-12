@@ -3,7 +3,7 @@ import {
     useRef, 
 } from "react"
 import {
-    min,
+//    min,
     max,
     select,
     scaleLinear,
@@ -36,10 +36,10 @@ const MultiLineChart = ({
 
         const yScale = scaleLinear()
             .domain([
-               min(data, (d) => d.dataMin) / 1.5,
-               max(data, (d) => d.dataMax) * 1.5
+               0,//min(data, (d) => d.dataMin) / 1.5,
+               max(data, (d) => d.dataMax) +1000
             ])
-            .range([height, 0])
+            .range([height - margin.bottom, 0])
         
         //root container
         const svgEl = select(svgRef.current)
@@ -53,23 +53,23 @@ const MultiLineChart = ({
             
         //add x grid lines with labels
         const xAxis = axisBottom(xScale)
-            .ticks(5)
+            .ticks(8)
             .tickSize(-height + margin.bottom)
         const xAxisGroup = svg.append("g")
             .attr("transform", `translate(0, ${height - margin.bottom})`)
             .call(xAxis)
         xAxisGroup.select(".domain").remove();
-        xAxisGroup.selectAll("line").attr("stroke", "rgba(255, 255, 255, 0.2)");
+        xAxisGroup.selectAll("line").attr("stroke", "rgba(0, 0, 0, 0.1)");
         
         //add y grid lines with labels
         const yAxis = axisLeft(yScale)
-            .ticks(5)
-            .tickSize(-width + margin.left)
+            .ticks(10)
+            .tickSize(-width)
             .tickFormat((val) => `$${val}`);
         const yAxisGroup = svg.append("g").call(yAxis);
         yAxisGroup.select(".domain").remove();
-        yAxisGroup.selectAll("line").attr("stroke", "rgba(255, 255, 255, 0.2)");
-
+        yAxisGroup.selectAll("line")
+        .attr("stroke", "rgba(0, 0, 0, 0.1)")
         
         // Draw the lines
         const singleLine = line()
@@ -83,7 +83,7 @@ const MultiLineChart = ({
             .append("path")
             .attr("fill", "none")
             .attr("stroke", (d) => d.color? d.color : "#6bc76b")
-            .attr("stroke-width", 3)
+            .attr("stroke-width", 2)
             .attr("d", (d) => singleLine(d.values));
     }, [data, width, height, margin])
     return (

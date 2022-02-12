@@ -1,57 +1,21 @@
 
-import {unstable_batchedUpdates} from "react-dom"
 import LoadingIcon from "../loadingIcon/LoadingIcon"
-import { 
-    useState, 
-    useEffect, 
-} from "react"
 import MultiLineChart from "./MultiLineChart"
 import { useSelector } from "react-redux"
-import {
-    instance, 
-    //terminateWorker
-} from "../../../app/workers/index"
+import { useParseInvestmentHistory } from "../../hooks/use-parse-investment-data"
 
 // Create new instance
 const DashboardGraph = ({
-
-    //investments,
     investmentData,
     className,
     graphKey
 }) =>{
-    const [isLoading, setLoading] = useState(false)
-    const [filteredData, setFilteredData] = useState([])
     const trackedInvestments = useSelector((state)=> state.userInfo.trackedInvestments)
-    // useEffect(() => {
-    //     return () => terminateWorker()
-    // }, [])
-    
+    const [filteredData, isLoading] = useParseInvestmentHistory({
+        trackedInvestments,
+        investmentData
+    })
 
-    useEffect(()=>{
-        let isMounted = true
-        const parseGraphData = async() =>{
-            if(!isMounted) return
-            setLoading(true)
-            const newData = await instance.processDataWithWebWorker({
-                data: investmentData,
-                trackedInvestments: trackedInvestments
-            })
-            if(!isMounted) return
-            unstable_batchedUpdates(()=>{
-                if(!isMounted) return
-                setFilteredData(newData)
-                setLoading(false)
-            })
-        }
-        if(isMounted){
-            parseGraphData()
-            .catch(console.error)
-        }
-        return () => {
-            isMounted = false
-        }
-    }, [investmentData, trackedInvestments])
     const dimensions = {
         width: 600, 
         height: 400, 

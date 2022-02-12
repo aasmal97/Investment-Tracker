@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import LoadingIcon from './components/loadingIcon/LoadingIcon';
 import NavWrapper from "./components/navbar/NavWrapper"
 import { useAuth } from './contexts/AuthContext';
-import Worker from './workers/index'
 
 //lazy loaded components for performance
 const Settings = React.lazy(() => import('./components/settings/Settings'))

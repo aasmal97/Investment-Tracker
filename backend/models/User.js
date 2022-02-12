@@ -17,6 +17,7 @@ const users = new mongoose.Schema({
         lastViewed: Date, 
         symbol: String, 
         investedAmount: Number, 
+        color: String, 
         dateAdded:{
             date: Date, 
             value: String

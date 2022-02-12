@@ -9,6 +9,7 @@ import DashboardSummary from "./DashboardSummary";
 import DashboardGraph from "./DashboardGraph"
 import debounce from "lodash.debounce";
 import useWindowWidth from "../../hooks/use-window-width";
+import pastelColors from "../../../utilityFunc/pastelColors"
 const Dashboard = (props) =>{
     const dispatch = useDispatch()
     const userInfo = useSelector((state) => state.userInfo)
@@ -113,6 +114,7 @@ const Dashboard = (props) =>{
             symbol: symbol,
             investedAmount:"0", 
             prevBalance: "0",
+            color: pastelColors(),
             dateAdded:{
                 date: currDate,
             }
