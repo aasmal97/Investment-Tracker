@@ -2,35 +2,35 @@ const mongoose = require('mongoose')
 const investmentHistory = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     userId: String,
-    crypto:[{name: String, symbol: String, data:[], investedAmount: String, initialValue: String}],
-    stock: [{name: String, symbol: String, data:[], investedAmount: String, initialValue: String}],
-    investmentTotal: String,
-    principalInvested: String,
-    investmentGains: String,
+    crypto:[{name: String, symbol: String, data:[], investedAmount: Number, initialValue: Number}],
+    stock: [{name: String, symbol: String, data:[], investedAmount: Number, initialValue: Number}],
+    investmentTotal: Number,
+    principalInvested: Number,
+    investmentGains: Number,
     topInvestment: {
         investmentType: String,
         investmentName: String,
         investmentSymbol: String,
         date: Date,
-        percentChange: String,
+        percentChange: Number,
     },
     lowestInvestment: {
         investmentType: String,
         investmentName: String,
         investmentSymbol: String,
         date: Date,
-        percentChange: String
+        percentChange: Number
     },
     yearlyPercentChange: {
         startDate:{
             date: Date,
-            principal: String,
+            principal: Number,
         },
         endDate:{
             date: Date,
-            principal: String,
+            principal: Number,
         },
-        yearsDiff: String
+        yearsDiff: Number,
     },
 })
 const InvestmentHistory = mongoose.model("InvestmentHistory", investmentHistory)

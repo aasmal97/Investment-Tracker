@@ -33,25 +33,30 @@ const getCryptoHistory = async (storedInvestmentData, storedInvestmentDataMap, i
     let coinDataArr = cryptoData.data.Data.Data
     let storedMapCoinData = storedInvestmentDataMap.crypto[symbol]
     //if we are already tracking this investment
-    //console.log(storedMapCoinData )
     if(storedMapCoinData){
         const storedCryptoData = storedInvestmentData.crypto[storedMapCoinData.index]
         const prevClosePrice = storedCryptoData.data[storedCryptoData.data.length-1].close
         const prevInvestedAmount = storedCryptoData.investedAmount
-        const newInvestAmount = (coinDataArr[coinDataArr.length-1] / prevClosePrice) * prevInvestedAmount
+        const newInvestAmount = (coinDataArr[coinDataArr.length-1].close / prevClosePrice) * prevInvestedAmount
         
         changedData.crypto[symbol] = [...storedMapCoinData.data, ...coinDataArr]
         storedInvestmentData.crypto[storedMapCoinData.index] = {
             ...storedInvestmentData.crypto[storedMapCoinData.index],
             symbol: symbol, 
             data: changedData.crypto[symbol], 
-            investedAmount: newInvestAmount,
+            investedAmount: parseFloat(newInvestAmount),
         }
     }
     //if we arent already tracking this investment
     else{
         changedData.crypto[symbol] = [...coinDataArr],
-        storedInvestmentData.crypto.push({name: name, symbol: symbol, data: changedData.crypto[symbol], investedAmount: investedAmount, initialValue: coinDataArr[coinDataArr.length-1].close.toString()})
+        storedInvestmentData.crypto.push({
+            name: name, 
+            symbol: symbol, 
+            data: changedData.crypto[symbol], 
+            investedAmount: parseFloat(investedAmount), 
+            initialValue: parseFloat(coinDataArr[coinDataArr.length-1].close)
+        })
     }
     return ["continue", null]    
 }

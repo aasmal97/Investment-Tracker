@@ -6,7 +6,9 @@ const DashboardSummary = (props) =>{
     return (
     <div className="dashboard-summary-data"> 
         <h2 id="dashboard-summary-title" className="w-100">Overview</h2>
-        <DashboardSummaryLabels {...props}/>
+        <DashboardSummaryLabels 
+            {...props}
+        />
         <div className="summary-row">  
             <SearchBar
                 searchBarAdd = {true} 

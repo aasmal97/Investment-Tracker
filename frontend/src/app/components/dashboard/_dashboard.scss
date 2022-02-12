@@ -120,3 +120,17 @@
     text-align: center;
     width: 100%;
 }
+.dashboard-all-investments-graph{
+    position: relative;
+}
+.dashboard-all-investments-graph-data{
+    flex-grow: 1;
+    min-width: 100%;
+    min-height: 100%;
+    //border: 1px solid black;
+    text{
+        opacity: 0.5;
+        color: black;
+        font-size: 0.8rem;
+    }
+}

@@ -15,7 +15,10 @@ router.route("/").post(async function (req, res, next) {
         firstName : req.body.firstName,
         lastName : req.body.lastName,
         verifiedEmail: req.body.emailVerified,
-        contactSettings: {promotional: true, userSpecific: true},
+        contactSettings: {
+            promotional: true, 
+            userSpecific: true
+        },
         trackedInvestments: [],
     }
     const currDate =  new Date()
@@ -24,33 +27,33 @@ router.route("/").post(async function (req, res, next) {
         userId: req.body.uid,
         crypto:[],
         stock:[],
-        investmentTotal: "0.00",
-        principalInvested: "0.00",
-        investmentGains: "0.00",
+        investmentTotal: 0.00,
+        principalInvested: 0.00,
+        investmentGains: 0.00,
         topInvestment:{
             investmentType: "",
             investmentName: "",
             investmentSymbol: "",
             date: currDate,
-            percentChange: "0.00",
+            percentChange: 0.00,
         },
         lowestInvestment:{
             investmentType: "",
             investmentName: "",
             investmentSymbol: "",
             date: currDate,
-            percentChange: "0.00",
+            percentChange: 0.00,
         },
         yearlyPercentChange:{
             startDate:{
                 date: currDate,
-                principal: "0.00",
+                principal: 0.00,
             },
             endDate:{
                 date: currDate,
-                principal: "0.00",
+                principal: 0.00,
             },
-            yearsDiff:"0.00"
+            yearsDiff: 0.00
         }
     }
     const newInvestmentHistory = new InvestmentHistory(newInvestmentHistoryProps)

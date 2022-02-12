@@ -5,7 +5,7 @@ const indicatorStyles = (value) =>{
         color: parseFloat(value)>=0 ? "green" : "red",
     }
 }
-const DashboardSummaryLabels = (props) =>{   
+const DashboardSummaryLabels = (props) =>{ 
     return (
     <>
     {/* {/*generate summary items*/

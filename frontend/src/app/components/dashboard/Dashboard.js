@@ -21,12 +21,30 @@ const Dashboard = (props) =>{
     const [selectionsSubmitted, setSelectionsSubmitted] = useState(false)
     const [selectedInvestments, setSelectedInvestments] = useState([])
     const [trackingWarning, setTrackingWarning] = useState(false)
+
     const summaryLabels = investmentData._id !== "" ? [
-        {label: "Top Performing Investment", value: investmentData.topInvestment, percentage: investmentData.topInvestment.percentChange},
-        {label: "Portfolio Total", value: "$" + investmentData.investmentTotal},
-        {label: "Principal Invested", value: "$" + investmentData.principalInvested},
-        {label: "Investment Gains", value: "$" + investmentData.investmentGains},
-        {label: "Percent Change", value: investmentData.yearlyPercentChange, percentage: investmentData.yearlyPercentChange}
+        {
+            label: "Top Performing Investment", 
+            value: investmentData.topInvestment, 
+            percentage: investmentData.topInvestment.percentChange
+        },
+        {
+            label: "Portfolio Total", 
+            value: "$" + investmentData.investmentTotal
+        },
+        {
+            label: "Principal Invested", 
+            value: "$" + investmentData.principalInvested
+        },
+        {
+            label: "Investment Gains", 
+            value: "$" + investmentData.investmentGains
+        },
+        {
+            label: "Percent Change", 
+            value: investmentData.yearlyPercentChange, 
+            percentage: investmentData.yearlyPercentChange
+        }
     ] : null
     useEffect(()=>{
         //only grab if store is not empty. We want to avoid too many requests
@@ -179,6 +197,7 @@ const Dashboard = (props) =>{
                     className = "dashboard-all-investments-graph"
                     graphKey = {true}
                     investments = {userInfo.trackedInvestments}
+                    investmentData = {investmentData}
                 />
             </div>
             <div className = "d-flex flex-wrap justify-content-center w-100">

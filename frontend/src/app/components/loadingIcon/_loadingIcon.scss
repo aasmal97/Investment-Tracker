@@ -7,6 +7,10 @@
     }
 }
 .loading-icon-container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
     @include center;
     @include fillContainer;
     .loading-icon{

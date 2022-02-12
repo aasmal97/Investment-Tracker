@@ -16,7 +16,7 @@ const users = new mongoose.Schema({
         name: String, 
         lastViewed: Date, 
         symbol: String, 
-        investedAmount: String, 
+        investedAmount: Number, 
         dateAdded:{
             date: Date, 
             value: String

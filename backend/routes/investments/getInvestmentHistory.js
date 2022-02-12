@@ -4,9 +4,12 @@ const getCryptoHistory = require("./getCryptoHistory")
 const InvestmentHistory = require("../../models/InvestmentHistory")
 const asyncWrapper = require("../../asyncWrapper")
 const CashTransactions = require("../../models/CashTransactions")
-
+const checkTopInvestment = require("./checkTopInvestment")
+const checkYearlyPercentChange = require("./checkYearlyPercentChange")
+const addInvestment = require("./addInvestment")
 router.route("/:token/:actionType?").post(async function (req, res, next) {
-    global.firebaseApp.auth().verifyIdToken(req.params.token)
+    global.firebaseApp.auth()
+    .verifyIdToken(req.params.token)
     .then(async(decodedToken) =>{
         const uid = decodedToken.uid
         const investments = req.body
@@ -17,40 +20,57 @@ router.route("/:token/:actionType?").post(async function (req, res, next) {
             userId: uid,
             crypto: {},
             stock: {},
-            investmentTotal: "0.00",
-            principalInvested: "0.00",
-            investmentGains: "0.00",
+            investmentTotal: 0.00,
+            principalInvested: 0.00,
+            investmentGains: 0.00,
             topInvestment: {},
             lowestInvestment: {},
             cashTransactions: [],
-            yearlyPercentChange: "0.00",
+            yearlyPercentChange: 0.00,
         }
         //generate object map for lookup. keys will be the symbol, and they will 
         //store current object index, and data as values
         //this is to keep lookup times in api calling loop, O(1)
-        let storedInvestmentDataMap = {_id: storedInvestmentData._id, userId: decodedToken.uid, crypto:{}, stock:{}}
+        let storedInvestmentDataMap = {
+            _id: storedInvestmentData._id, 
+            userId: decodedToken.uid, 
+            crypto:{}, 
+            stock:{}
+        }
         for(let i in storedInvestmentData.crypto) storedInvestmentDataMap.crypto[storedInvestmentData.crypto[i].symbol] = {index:i, data: storedInvestmentData.crypto[i].data}
         for(let i in storedInvestmentData.stock) storedInvestmentDataMap.stock[storedInvestmentData.stock[i].symbol] = {index:i, data: storedInvestmentData.stock[i].data}
+        
         //loop through all investments and check if we already have a history of them
         for (let investment of investments){
             switch(investment.investmentType){
                 case "crypto":
-                    const [continueCrypto, getCryptoError] = await getCryptoHistory(storedInvestmentData, storedInvestmentDataMap, investment, investmentDataChanged, res)
-                    if(getCryptoError) return;
+                    const [continueCrypto, getCryptoError] = await getCryptoHistory(
+                                                                        storedInvestmentData, 
+                                                                        storedInvestmentDataMap, 
+                                                                        investment, 
+                                                                        investmentDataChanged, 
+                                                                        res
+                                                                )
+                    if(getCryptoError) return res.send({error: "could not check crypto history", errorMessage: "Could check crypto history"});
                     break;
                 case "stock":
                     console.log("stock")
                     break;
                 default:
-                    return res.send({error: "This investment type is not supported", investmentCause: investment.symbol})
+                    return res.send({
+                        error: "This investment type is not supported", 
+                        investmentCause: investment.symbol
+                    })
             }
         }
-    //calculate and update the rest of the overview variables
-    //total Investment Portfolio
+        //calculate and update the rest of the overview variables
+        //total Investment Portfolio
         const cryptoInvestmentTotal = storedInvestmentData.crypto.reduce((prev, curr) => prev +  parseFloat(curr.investedAmount), 0) 
         const stockInvestmentTotal = storedInvestmentData.stock.reduce((prev, curr) => prev + parseFloat(curr.investedAmount), 0)
+
         investmentDataChanged.investmentTotal = (parseFloat(cryptoInvestmentTotal) + parseFloat(stockInvestmentTotal)).toFixed(2)
-        storedInvestmentData.investmentTotal = investmentDataChanged.investmentTotal.toString()
+        storedInvestmentData.investmentTotal = investmentDataChanged.investmentTotal
+   
         //cash transactions by ascending order
         let [cashTransactions, transactionsError] = await asyncWrapper(CashTransactions.find({userId: uid}).exec())
         if(transactionsError){
@@ -59,97 +79,57 @@ router.route("/:token/:actionType?").post(async function (req, res, next) {
         }
         cashTransactions = cashTransactions.sort((a, b) => a.date - b.date)
 
-    //add new cash transactions if needed
-    //adjust investment principals
+        //add new cash transactions if needed
+        //adjust investment principals
         let newCashTransactions = []
         if(req.params.actionType === "addInvestment") {
-            for(let i of investments) {
-                const transactionProps = {
-                    userId: uid,
-                    investmentSymbol: i.symbol, 
-                    changeBy: i.investedAmount.toString(), 
-                    prevBalance: i.prevBalance.toString(), 
-                    date: i.dateAdded.date
-                }
-                const transaction = new CashTransactions(transactionProps)
-                newCashTransactions.push(transaction)
-                cashTransactions.push(transaction)
-                storedInvestmentData.principalInvested = (parseFloat(storedInvestmentData.principalInvested) + parseFloat(transactionProps.changeBy)).toFixed(2) 
-            }
+            const [transactions, newlyCreatedTransactions , principalInvested] = addInvestment({
+                investments: investments,
+                storedInvestmentData: storedInvestmentData,
+                uid: uid,
+                cashTransactions: cashTransactions
+            })
+            storedInvestmentData.principalInvested = principalInvested
             //returns the last 500 items in array
-            investmentDataChanged.cashTransactions = cashTransactions.slice(cashTransactions.length - 1000)
+            investmentDataChanged.cashTransactions = transactions
+            newCashTransactions = newlyCreatedTransactions
         }
 
-    //principal
+        //principal
         investmentDataChanged.principalInvested = storedInvestmentData.principalInvested 
 
-    //lifetime investment gains in USD
-        storedInvestmentData.investmentGains = (storedInvestmentData.investmentTotal - storedInvestmentData.principalInvested).toFixed(2).toString()
+        //lifetime investment gains in USD
+        storedInvestmentData.investmentGains = (storedInvestmentData.investmentTotal - storedInvestmentData.principalInvested)
+                                                .toFixed(2).toString()
         investmentDataChanged.investmentGains = storedInvestmentData.investmentGains
-
-    //calculate yearly percent change
-        const storedYearlyPercent = storedInvestmentData.yearlyPercentChange
-        let startDate = storedYearlyPercent.startDate
-        let endDate = storedYearlyPercent.endDate
-        let dayDifference = Math.floor((endDate.date - startDate.date) / 86400000)
-        // indicates a year has passed so make start Date 
-        // principal equal to current investment total
-        if(dayDifference > 365 || storedYearlyPercent.startDate.principal === "0.00") {
-            storedYearlyPercent.startDate = {date: endDate.date, principal: storedInvestmentData.investmentTotal}
-            let yearsDiff = (storedInvestmentData.investmentTotal - storedInvestmentData.principalInvested).toFixed(2).toString()
-            storedYearlyPercent.yearsDiff = yearsDiff 
-        }
-        let newPrincipal = (parseFloat(storedYearlyPercent.yearsDiff) + parseFloat(storedInvestmentData.principalInvested)).toFixed(2).toString()
-        storedYearlyPercent.endDate = {date: new Date(), principal: newPrincipal}
-
-        //formula to extract yearly percent change from stored
-        let startingBalance = storedYearlyPercent.startDate.principal
-        let netDeposits = storedYearlyPercent.endDate.principal - startingBalance
-        let adjustedEndingBalance = storedInvestmentData.investmentTotal - netDeposits
-        let yearlyReturn = ( (adjustedEndingBalance/startingBalance) - 1 ) * 100
-        if(startingBalance === "0.00" || "0" || 0) investmentDataChanged.yearlyPercentChange = "0.00"
+        
+        //calculate yearly percent change
+        const [startingBalance, yearlyReturn] = checkYearlyPercentChange(storedInvestmentData)
+        if(startingBalance === "0.00" || "0" || 0) investmentDataChanged.yearlyPercentChange = 0
         else investmentDataChanged.yearlyPercentChange = yearlyReturn.toFixed(2).toString()
     
-    //calculate top and low performing investments
-        const checkTopInvestment = (top, low, data, type) => {
-            for(let i of data[type]){
-                let percentChange =( (i.data[i.data.length-1].close / i.initialValue) -1 ) * 100
-                //check if its the highest change
-                if(percentChange > parseFloat(top.percentChange) || top.investmentName === ""){
-                    top = {
-                        investmentType: type,
-                        investmentSymbol: i.symbol,
-                        investmentName: i.name,
-                        percentChange: percentChange.toString(),
-                        date: new Date(),
-                    }
-                }
-                //check if its the lowest percent change
-                if(percentChange <= parseFloat(low.percentChange) || low.investmentName === ""){
-                    low = {
-                        investmentType: type,
-                        investmentSymbol: i.symbol,
-                        investmentName: i.name,
-                        percentChange: percentChange.toString(),
-                        date: new Date(),
-                    }
-                }
-            }
-            
-            return [top, low]   
-        }
+        //calculate lowest and top investments
         let topInvestment = storedInvestmentData.topInvestment
         let lowestInvestment = storedInvestmentData.lowestInvestment
         if(req.params.actionType === "initialLoad"){
             [topInvestment, lowestInvestment] = checkTopInvestment(topInvestment, lowestInvestment, storedInvestmentData, "crypto")
             [topInvestment, lowestInvestment] = checkTopInvestment(topInvestment, lowestInvestment, storedInvestmentData, "stock")
         }
+
         storedInvestmentData.topInvestment = topInvestment
         investmentDataChanged.topInvestment = topInvestment
         storedInvestmentData.lowestInvestment = lowestInvestment
         investmentDataChanged.lowestInvestment = lowestInvestment
 
-    //save all document changes to database
+        if(isNaN(storedInvestmentData.investmentTotal)) return res.send({
+            error: "Invalid Investment Total", 
+            errorMessage: "Invalid Investment Total"
+        })
+        if(isNaN(storedInvestmentData.principalInvested)) return res.send({
+            error: "Invalid Principal Total", 
+            errorMessage: "Invalid Principal Total"
+        })
+        //save all document changes to database
         const [saveSuccess, saveError] = await asyncWrapper(storedInvestmentData.save())
         if(saveError){
             //handle error
@@ -177,7 +157,7 @@ router.route("/:token/:actionType?").post(async function (req, res, next) {
     })
     .catch((error) => {
         console.error(error)
-        return res.send({error: "Something went wrong"})
+        return res.send({error: "This token is invalid"})
     });
 });
 

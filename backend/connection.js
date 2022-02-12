@@ -31,9 +31,10 @@ global.firebaseApp = firebaseApp
 
 //support cross orgin scripting
 const corsOptions = {
-    origin: process.env.FRONTEND_DOMAIN_ORIGIN,
+    origin: [process.env.FRONTEND_DOMAIN_ORIGIN, process.env.SECOND_DOMAIN_ORIGIN],
     optionsSuccessStatus: 200
 }
+
 const db_server = process.env.MONGO_DB_DEV_URI
 //for logging database name
 let db_name = db_server.match(/\@[A-Za-z-]+/).toString()
