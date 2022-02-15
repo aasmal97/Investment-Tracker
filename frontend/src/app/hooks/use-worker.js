@@ -25,10 +25,10 @@ export function useWorker() {
  function makeWorkerApiAndCleanup() {
 
     // Here we create our worker and wrap it with comlink so we can interact with it
-    let worker = new Worker("../../workers", {
+    let worker = new Worker(new URL("../../workers", {
       name: "parseData",
       type: "module"
-    });
+    }));
     const workerApi = wrap(worker);
     // A cleanup function that releases the comlink proxy and terminates the worker
     const cleanup = () => {

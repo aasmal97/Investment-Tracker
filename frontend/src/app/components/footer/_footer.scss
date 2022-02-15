@@ -1,6 +1,6 @@
 
 .footer-container{
-    margin-top: 10rem;
+    border-top: 1px solid #363636;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -9,45 +9,86 @@
     background-color: $dark-gray;
     color: $white;
     font-family: 'Roboto', 'sans-serif';
+    a:hover{
+        color: $white;
+        opacity: 0.6;
+    }
 }
 .footer-social-media{
-    margin-top: 2rem;
-    margin-bottom: 1rem;
+    margin-top: 2.5rem;
+    margin-bottom: 2rem;
     display: flex;
     flex-direction: column;
 }
-.footer-social-media:first-child{
+.footer-social-media>div:first-child{
     display: flex;
-    text-align: center;
     justify-content: center;
     width: 100%;
     font-weight: 400;
-    font-size: 0.9rem;
+    font-size: 1.05rem;
 }
-.footer-social-media:last-child{
+.footer-social-media-images{
     display: flex;
     justify-content: center;
+    margin-top: 1rem;
+    a{
+        cursor: pointer;
+        margin: 0 0.4rem;
+    }
+    img{
+        height: 3.3rem;
+        width: 3.3rem;
+    }
 }
-// #copyright{
-//     @include no-space;
-//     color: white;
-// }
-// #footer{
-//     padding-top: 3rem;
-//     padding-bottom: 2.5rem;
-//     background-color: rgb(107, 97, 144);
-// }
-// .foot-link{
-//     color: $main-font-color;
-//     text-align: center;
-//     width: 60%;
-// }
+.footer-circle-spacer{
+        fill: $white;
+        width: 0.25rem;
+        height: 0.25rem;
+}
+.footer-additional-links{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    a{
+        font-size: 1rem;
+        color:$white;
+        text-decoration: none;
+        font-family: "Roboto", sans-serif;
+        margin: 0 0.5rem;
+    }
+    
+}
+.footer-app-use-policies{
+    font-size: 0.8rem;
+    margin-bottom: 0.8rem;
+    padding-right: 0.6rem;
 
-// .foot-link:hover{
-//     @include hover-color;
-//     @include border-radius(5px);
-// }
+    a{
+        font-weight: 300;
+        color:$white;
+        text-decoration: none;
+        font-family: "Roboto", sans-serif;
+        margin: 0 0.4rem;
+    }
+}
+.footer-bottom{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2.5rem;
 
-// #footer div div>h5{
-//     color: white
-// }
+    .footer-copyright{
+        font-size: 0.75rem;
+        font-weight: 400;
+        color: $gray;
+    }
+    .footer-source-code{
+        margin-top: 0.5rem;
+        a{
+            color: $light-blue;
+            margin-left: 0.5rem;
+        }
+    }
+}

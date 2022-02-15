@@ -1,6 +1,9 @@
 //fonts
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=ABeeZee&display=swap');
 
+//abstract
 @import "./scss_abstracts/variables";
 //utilties
 @import "../src/app/components/loadingIcon/loadingIcon";
@@ -8,6 +11,7 @@
 
 
 //General pages
+@import "../src/app/components/home/home";
 @import "../src/app/components/settings/settings";
 @import "../src/app/components/navbar/navbar";
 @import "../src/app/components/dashboard/dashboard";

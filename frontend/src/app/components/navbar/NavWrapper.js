@@ -9,7 +9,9 @@ export default function NavWrapper(props) {
             <Navbar 
                 windowWidth = {windowWidth}
             />
-            {props.children}
+                <div style={{paddingTop: "3.7rem"}}>
+                    {props.children}
+                </div>
             <Footer 
                 windowWidth = {windowWidth}
             />
