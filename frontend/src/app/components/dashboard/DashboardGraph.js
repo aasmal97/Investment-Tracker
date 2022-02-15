@@ -1,21 +1,20 @@
 
 import LoadingIcon from "../loadingIcon/LoadingIcon"
 import MultiLineChart from "./MultiLineChart"
-import { useSelector } from "react-redux"
 import { useParseInvestmentHistory } from "../../hooks/use-parse-investment-data"
 
 // Create new instance
 const DashboardGraph = ({
     investmentData,
+    trackedInvestments,
     className,
+    graphClassName, 
     graphKey
 }) =>{
-    const trackedInvestments = useSelector((state)=> state.userInfo.trackedInvestments)
     const [filteredData, isLoading] = useParseInvestmentHistory({
         trackedInvestments,
         investmentData
     })
-
     const dimensions = {
         width: 600, 
         height: 400, 
@@ -36,7 +35,8 @@ const DashboardGraph = ({
                 <MultiLineChart 
                     data = {filteredData}
                     dimensions = {dimensions}
-                    className = {"dashboard-all-investments-graph-data"}
+                    className = {graphClassName}
+                    graphKey = {graphKey}
                 />
             }
             

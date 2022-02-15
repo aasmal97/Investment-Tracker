@@ -51,7 +51,7 @@ router.route("/:token/:actionType?").post(async function (req, res, next) {
                                                                         investmentDataChanged, 
                                                                         res
                                                                 )
-                    if(getCryptoError) return res.send({error: "could not check crypto history", errorMessage: "Could check crypto history"});
+                    if(getCryptoError) return console.error(getCryptoError);
                     break;
                 case "stock":
                     console.log("stock")

@@ -1,4 +1,6 @@
 .dashboard-container{
+    display: flex;
+    flex-direction: column;
     position: relative;
     margin-top: 3.5rem;
     background-color: $dark-gray;
@@ -15,8 +17,14 @@
     @include border-radius(0.5rem);
 }
 .dashboard-summary-data{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
     padding-bottom: 1rem;
     .summary-row{
+        display: flex;
+        align-items: center;
+        height: 100%;
         padding: 0.3rem 0;
         border-bottom: 1px solid $light-gray;
         min-height: 2.7rem;   
@@ -119,6 +127,7 @@
     left: 0;
     text-align: center;
     width: 100%;
+    z-index: 1;
 }
 .dashboard-all-investments-graph{
     position: relative;
@@ -132,4 +141,20 @@
         color: black;
         font-size: 0.8rem;
     }
+}
+.dashboard-card-container{
+    display: flex;
+    height: fit-content;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+    //background-color: ;
+    padding: 3%
+}
+.dashboard-card{
+    @include border-radius(0.5rem);
+    background-color: $white;
+    position: relative;
+    height: min-content;
+    width: 47%;
 }

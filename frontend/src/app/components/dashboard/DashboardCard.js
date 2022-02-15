@@ -1,8 +1,16 @@
-const DashboardCard = (props) =>{
 
+import DashboardGraph from "./DashboardGraph"
+const DashboardCard = ({
+    trackedInvestments,
+    investmentData,
+}) =>{
     return(
-        <div>
-
+        <div className="dashboard-card">
+            <DashboardGraph 
+                trackedInvestments={trackedInvestments}
+                investmentData = {investmentData}
+                singleLine = {true}
+            />
         </div>
     )
 }

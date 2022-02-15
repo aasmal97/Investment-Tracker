@@ -5,16 +5,18 @@ const indicatorStyles = (value) =>{
         color: parseFloat(value)>=0 ? "green" : "red",
     }
 }
-const DashboardSummaryLabels = (props) =>{ 
+const DashboardSummaryLabels = ({
+    summaryLabels,
+}) =>{ 
     return (
     <>
     {/* {/*generate summary items*/
-        props.summaryLabels ? 
-        props.summaryLabels.map((data) => {
+        summaryLabels ? 
+        summaryLabels.map((data) => {
             const checkEmpty = Object.keys(data.value).length === 0 
             const value = checkEmpty ?  0: data.value
             return(
-                <div key={data.label} className="summary-row d-flex align-items-center justify-content-between">
+                <div key={data.label} className="summary-row">
                     <p className="row-label">{data.label}</p>
                     <div className="flex-grow-1 row-data">
                         <p className="d-flex justify-content-end">

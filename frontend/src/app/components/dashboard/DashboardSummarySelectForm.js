@@ -1,12 +1,18 @@
 import LoadingIcon from "../loadingIcon/LoadingIcon"
-const SelectInvestmentsForm = (props) =>{
+const SelectInvestmentsForm = ({
+    onSaveInvestSubmit,
+    selectionsSubmitted,
+    onDeleteInvestClick,
+    onAddInvestFormChange,
+    selectedInvestments
+}) =>{
     return(
         <form 
             id={"dashboard-summary-selected-form"}
-            onSubmit = {props.onSaveInvestSubmit}
+            onSubmit = {onSaveInvestSubmit}
             className="d-flex flex-column"
         >
-             {props.selectionsSubmitted ? 
+             {selectionsSubmitted ? 
                 <div className="dashboard-summary-selected-form-loading">
                     <LoadingIcon light={true}/>
                 </div>
@@ -17,7 +23,7 @@ const SelectInvestmentsForm = (props) =>{
                     Selected Investments
             </h2>
             <div className="w-100 dashboard-add-invest-container">
-                {props.selectedInvestments.map((investment, index) =>{
+                {selectedInvestments.map((investment, index) =>{
                     return (
                         <div 
                             key={investment.symbol+" "+investment.investmentType}
@@ -28,7 +34,7 @@ const SelectInvestmentsForm = (props) =>{
                                     type="button" 
                                     aria-label="delete" 
                                     className="btn btn-danger row-item-delete-btn"
-                                    onClick = {props.onDeleteInvestClick}
+                                    onClick = {onDeleteInvestClick}
                                     data-symbol={investment.symbol}
                                     data-index={index}
                                 >
@@ -46,7 +52,7 @@ const SelectInvestmentsForm = (props) =>{
                                 <input 
                                     id={investment.symbol+" "+investment.investmentType}
                                     value={investment.investedAmount} 
-                                    onChange ={props.onAddInvestFormChange} 
+                                    onChange ={onAddInvestFormChange} 
                                     type="number" 
                                     className="form-control" 
                                     placeholder="100, 100.23, etc"
@@ -64,7 +70,7 @@ const SelectInvestmentsForm = (props) =>{
                 aria-label="save investments"
                 className="btn btn-primary mt-3 mb-2 align-self-center"
                 id="selected-invest-form-save-btn"
-                disabled = {props.selectionsSubmitted}
+                disabled = {selectionsSubmitted}
             >
                 Save
             </button>

@@ -3,7 +3,7 @@ import {
     useRef, 
 } from "react"
 import {
-//    min,
+    min,
     max,
     select,
     scaleLinear,
@@ -17,7 +17,8 @@ import {
 const MultiLineChart = ({
     data, 
     dimensions,
-    className
+    className,
+    singleLine
 }) =>{
     const { width, height, margin } = dimensions;
     const svgRef = useRef()
@@ -36,8 +37,8 @@ const MultiLineChart = ({
 
         const yScale = scaleLinear()
             .domain([
-               0,//min(data, (d) => d.dataMin) / 1.5,
-               max(data, (d) => d.dataMax) +1000
+               min(data, (d) => d.dataMin)/1.1,
+               max(data, (d) => d.dataMax)*1.1,
             ])
             .range([height - margin.bottom, 0])
         

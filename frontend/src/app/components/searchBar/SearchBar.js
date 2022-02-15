@@ -3,34 +3,55 @@ import { faBitcoin } from '@fortawesome/free-brands-svg-icons';
 import SearchDropdown from "./SearchDropdown"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const SearchBar = (props) =>{
+const SearchBar = ({
+    label, 
+    id,
+    searchPlaceholder,
+    searchInput,
+    searchResults,
+    onSearchClick,
+    className,
+    onSearchChange,
+    searchType,
+    minus,
+    onAddInvestClick,
+    searchBarAdd,
+    searchBarMinus
+}) =>{
     return (
-        <div className={`${props.className? props.className+" ":""}`}>
+        <div className={`${className? className+" ":""}`}>
             <label 
-                htmlFor={props.id} 
+                htmlFor={id} 
                 className="form-label">
-                   {props.label}
+                   {label}
             </label>
             <div className="input-group search-bar"> 
                 <input 
                     type="text" 
                     className="form-control" 
-                    id={props.id} 
-                    placeholder={props.searchPlaceholder}
-                    onChange = {props.onSearchChange}
-                    value = {props.searchInput}
+                    id={id} 
+                    placeholder={searchPlaceholder}
+                    onChange = {onSearchChange}
+                    value = {searchInput}
                 />
-                {props.searchResults.status ? 
-                    <SearchDropdown {...props} />
+                {searchResults.status ? 
+                    <SearchDropdown 
+                        searchType = {searchType}
+                        searchResults = {searchResults}
+                        onAddInvestClick = {onAddInvestClick}
+                        searchBarAdd = {searchBarAdd}
+                        searchBarMinus = {searchBarMinus}
+                        minus = {minus}
+                    />
                 : null}
                 
                 <button
                     id="stock-search-btn"
                     type="button"
                     data-search-type = "stock"
-                    className = {`btn btn-${props.searchType === "stock" ? "secondary" : "dark"}`}
+                    className = {`btn btn-${searchType === "stock" ? "secondary" : "dark"}`}
                     aria-label={"search-stock"}
-                    onClick = {props.onSearchClick}
+                    onClick = {onSearchClick}
                 >
                     <FontAwesomeIcon icon= {faChartLine}/>
                 </button>
@@ -38,9 +59,9 @@ const SearchBar = (props) =>{
                     id = "crypto-search-btn"
                     type="button"
                     data-search-type ="crypto"
-                    className = {`btn btn-${props.searchType === "crypto" ? "secondary" : "dark"}`}
+                    className = {`btn btn-${searchType === "crypto" ? "secondary" : "dark"}`}
                     aria-label={"search-crypto"}
-                    onClick = {props.onSearchClick}
+                    onClick = {onSearchClick}
                 >
                     <FontAwesomeIcon icon= {faBitcoin}/>
                 </button>
