@@ -6,11 +6,13 @@ import NavWrapper from "./components/navbar/NavWrapper"
 import { useAuth } from './contexts/AuthContext';
 
 //lazy loaded components for performance
+const Home = React.lazy(() => import('./components/home/Home'))
 const Settings = React.lazy(() => import('./components/settings/Settings'))
 const Dashboard = React.lazy(() => import('./components/dashboard/Dashboard'))
 const SignUp = React.lazy(() => import('./components/forms/signUp/Signup'))
 const Login = React.lazy(() => import('./components/forms/login/Login'))
 const ResetPassword = React.lazy(() => import('./components/forms/login/ResetPassword'))
+
 function App() {
   const {currentUser} = useAuth()
   return (
@@ -21,6 +23,11 @@ function App() {
         }>
 
             <Routes>
+                <Route
+                  exact path = "/"
+                  element={<NavWrapper><Home/></NavWrapper>}
+                > 
+                </Route>
                 <Route
                   exact path="/signup"
                   element={currentUser ?<Navigate to="/dashboard"/> :<NavWrapper><SignUp/></NavWrapper>}

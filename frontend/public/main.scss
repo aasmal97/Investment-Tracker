@@ -1,10 +1,18 @@
+//fonts
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
 @import "./scss_abstracts/variables";
+//utilties
 @import "../src/app/components/loadingIcon/loadingIcon";
+@import "../src/app/components/searchBar/search";
+
+
+//General pages
 @import "../src/app/components/settings/settings";
 @import "../src/app/components/navbar/navbar";
 @import "../src/app/components/dashboard/dashboard";
 @import "../src/app/components/forms/forms";
-@import "../src/app/components/searchBar/search";
+@import "../src/app/components/footer/footer";
 @import "./scss_abstracts/breakPoints";
 body, html{
     min-height: 40rem;
