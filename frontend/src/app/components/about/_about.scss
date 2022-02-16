@@ -1,0 +1,142 @@
+.about-bg-container{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.about-pg-content{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    background-color: $dark-gray;
+}
+
+.about-pg-profile-image{
+    background-color: $dark-gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    
+    img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.about-pg-developer-summary-card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: $dark-gray;
+    width: 37vw;
+    min-width: 24rem;
+    padding: 3rem;
+    flex-grow: 1;
+    min-height: calc(100vh - #{$navbar-height});
+    h2{
+        text-align: center;;
+        margin-bottom: 3rem;
+        color: $white;
+        font-family: "Open Sans", "san-serif";
+        font-weight: 600;
+        font-size: 2.5rem;
+    }
+    p{
+        width: 80%;
+        font-weight: 400;
+        color: $white;
+        font-size: 0.95rem;
+        font-family: "Open Sans", "sans-serif";
+        line-height: 1.7rem;
+    }
+    
+}
+
+.about-pg-social-media{
+    margin: 2rem;
+    a{
+        margin: 0.5rem;
+    }
+    a:hover{
+        opacity: 0.5;
+    }
+}
+.about-pg-why-fintrack{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: $white;
+    padding: 3.5rem;
+    padding-bottom: 0;
+    max-width: 800px;
+    font-family: "Georgia", "Open Sans";
+    font-weight: 400;
+    font-size: 1.1rem;
+    line-height: 2rem;
+    h2{
+        text-align: center;;
+        margin-bottom: 3.5rem;
+        font-family: "Georgia", "san-serif";
+        font-weight: 500;
+        font-size: 3.2rem;
+    }
+    .why-fintrack-intro{
+        margin-bottom: 2rem;
+        span{
+            font-family: 'Roboto Serif', sans-serif;
+            font-size: 3rem;
+            font-weight: 500;
+            width: 0.5rem;
+        }
+    }
+    li{
+        position: relative;
+        margin-bottom: 2rem;
+        display: flex;
+        flex-direction: column;
+        .marker{
+            position: absolute;
+            display: flex;
+            align-items: center;
+            top: -0.1rem;
+            left: -1.4rem;
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+        span{
+            font-family: 'Roboto Serif', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            width: 100%;
+            margin-bottom: 0.3rem;
+        }
+    }
+    .why-build-fintrack{
+        display: flex;
+        width: 100%;
+        align-items: center;
+        flex-direction: column;
+        font-size: 3rem;
+        line-height: 3.7rem;
+        font-weight: 300;
+        margin-bottom: 3rem;
+    }
+}
+.about-pg-contact-me{
+    font-family: "Georgia", "Open Sans";
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding: 1.5rem;
+    padding-bottom: 3.5rem;
+    font-size: 1rem;
+    a{
+        margin-left: 0.2rem;
+    }
+}

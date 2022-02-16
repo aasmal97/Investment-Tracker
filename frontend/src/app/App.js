@@ -7,6 +7,7 @@ import { useAuth } from './contexts/AuthContext';
 
 //lazy loaded components for performance
 const Home = React.lazy(() => import('./components/home/Home'))
+const About = React.lazy(() => import('./components/about/About'))
 const Settings = React.lazy(() => import('./components/settings/Settings'))
 const Dashboard = React.lazy(() => import('./components/dashboard/Dashboard'))
 const SignUp = React.lazy(() => import('./components/forms/signUp/Signup'))
@@ -26,6 +27,11 @@ function App() {
                 <Route
                   exact path = "/"
                   element={<NavWrapper><Home/></NavWrapper>}
+                > 
+                </Route>
+                <Route
+                  exact path = "/about"
+                  element={<NavWrapper><About/></NavWrapper>}
                 > 
                 </Route>
                 <Route

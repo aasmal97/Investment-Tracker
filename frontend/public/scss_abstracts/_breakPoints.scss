@@ -5,7 +5,7 @@
 @import "../../src/app/components/dashboard/dashboardBreakpoints";
 @import "../../src/app/components/home/homeBreakPoints";
 @import "../../src/app/components/footer/footerBreakPoints";
-
+@import "../../src/app/components/about/aboutBreakPoints";
 @media (min-width: 992px) {
     @include navbar-lg;
     @include settings-lg;
@@ -32,4 +32,5 @@
     @include dashboard-sm;
     @include home-pg-sm;
     @include footer-sm;
+    @include about-pg-sm;
 }

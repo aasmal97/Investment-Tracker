@@ -1,0 +1,19 @@
+{
+    "intro": "There’s a plethora of investment trackers that exist today. So why build another one? If you want the short and sweet reasons, continue to the very bottom of this section. If you’re still here, thank you for allowing me to indulge. First, let me outline who this app isn’t for.", 
+    "lists": {
+        "list1": [
+            "Day traders. If you need real-time updates of how investment values are changing, you should stick to the investment trackers already present on most exchanges. In fact, if you’re using this app for that, I’d be surprised if you haven’t lost money, right about… now. Just kidding, but seriously, don’t use this app for day-trading. Not unless you’re a madman.",
+            "Well-educated finance professionals. If you can read the market like reading Dr. Seuss, this app will be too simple for your needs. That said, you’re already a walking incarnation of genius, and probably have more money than I could spend in a lifetime, so kudos to you. Just be careful to not acquire a habit of gambling. At that point, it’s a downhill slope to bankruptcy.",
+            "Speculators. If you treat investing like gambling, or sell your investments quickly, I’ll pray for you and that’s about it. On second thought, I’ll also leave you with Warren Buffet’s famous words, “Investment must be rational; if you can't understand it, don't do it.",
+            "Investors not interested in crypto and stocks. This is self-explanatory. In the future, I may add more options, but I am limited by my knowledge and time. Unfortunately, learning about gold, real estate, etc. will be time consuming."
+        ],
+        "list2": [
+            "All-in-one. There are barely any trackers that allow you to collectively see crypto and stocks together. It’s normally one or the other, and never both. This may seem like a non-issue, but today, many investors are interested in both, and see them as long-term investments",
+            "Data Accuracy. A lot of trackers fail to give long-term investment data that may be of great interest. If they do, it is hidden behind a pay wall or there must be an active account with an exchange. Due to this, long-term data may not be accurate, since data is specific to one account. If your investments are diversified, you will not have only one investment account (i.e Retirement fund, personal IRA, personal exchange account, etc).",
+            "Long Term Investors. Many investors are not day-traders, speculators, or finance geniuses. They just want stable returns year after year and want to know which investments provide that for them and which ones don’t. They want to know how they’re investments are doing year – to – year, not day-to-day.",
+            "Personal Use. This was built for my personal unique case. I have investments in both stocks and crypto, and I wanted an automated way of getting year-to-year data. I spend about an hour a month having to do the calculations myself, and it was tedious. Now there’s an app for it, and I got to expand my technical capabilities. It was a win-win for me."
+        ]
+    },
+    "contact": "arkyasmal@gmail.com"
+
+}

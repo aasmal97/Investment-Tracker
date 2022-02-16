@@ -55,6 +55,7 @@ const Footer = ({
                     {circleSpacer}
                     <a
                         href="mailto:arkyasmal@gmail.com"
+                        rel="noopener noreferrer"
                     >
                         Contact
                     </a>

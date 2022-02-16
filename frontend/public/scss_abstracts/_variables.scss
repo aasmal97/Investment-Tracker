@@ -3,6 +3,9 @@ $light-gray: rgb(201, 201, 201);
 
 $gray: #9B9B9B;
 $dark-gray:rgb(63, 70, 82);
+
+$darker-gray:rgb(70, 70, 70);
+
 $darkest-gray: rgb(39, 44, 51);
 
 $background: rgba(0, 0, 0, 0.315);
@@ -10,8 +13,10 @@ $white: white;
 
 $green: #6bc76b;
 $dark-green: #5aaa5a;
-
 $light-blue: #3391FF;
+
+$navbar-height: 3.7rem;
+
 @mixin remove-btn-default {
     background: none;
     border: none;

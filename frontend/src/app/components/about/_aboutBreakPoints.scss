@@ -1,0 +1,31 @@
+@mixin about-pg-sm {
+    .about-pg-content{
+        flex-direction: column;
+        justify-content: start;
+        align-items: center;
+    }
+    .about-pg-developer-summary-card{
+        width: 100%;
+        min-width: unset;
+        padding: 3rem 1.5rem;
+        p{
+            text-align: center;
+            width: 90%;
+        }
+        
+    }
+    .about-pg-profile-image{
+        width: 100%;
+    }
+    .about-pg-why-fintrack{
+        padding: 3.5rem 1.5rem;
+        padding-bottom:0;
+        .why-build-fintrack{
+            text-align: center;
+            font-size: 2.5rem;
+            line-height: 3rem;
+            margin-bottom: 3rem;
+        }
+    }
+    
+}
